@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "partymusicrequest": {
+      "hosting": {
+        "pmr": [
+          "partymusicrequest"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "partymusicrequest"
+  }
+}
