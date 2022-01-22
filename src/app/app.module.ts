@@ -10,7 +10,7 @@ import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { firebase } from 'src/environments/firebase_config';
-
+import {MatIconModule} from '@angular/material/icon'; 
 
 @NgModule({
   declarations: [
@@ -20,10 +20,12 @@ import { firebase } from 'src/environments/firebase_config';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+
     provideFirebaseApp(() => initializeApp(firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

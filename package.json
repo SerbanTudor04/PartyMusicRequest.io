@@ -24,6 +24,7 @@
     "browserify": "^17.0.0",
     "dotenv": "^14.2.0",
     "firebase": "^9.6.4",
+    "firebaseui": "^6.0.0",
     "os-browserify": "^0.3.0",
     "rxfire": "^6.0.0",
     "rxjs": "~7.4.0",

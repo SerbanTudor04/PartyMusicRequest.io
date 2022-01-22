@@ -1,0 +1,41 @@
+@import '../../theme.scss';
+
+.singin__container{
+    width: 50%;
+    position: absolute;
+    left:50%;
+    top:10%;
+    transform: translate(-50%,10%);
+    .singin__title{
+        
+        .main{
+            text-align: center;
+            
+            font-size: xx-large;
+            color:darkblue
+        }
+        .main::after{
+            content: "PartyMusicRequest:";
+            position: absolute;
+            display: block;
+            opacity: 0.7;
+            font-size: medium;
+            // top: ;
+            left: 50%;
+            top: 25%;
+            color: gray;
+            transform: translate(-50%);
+        }
+    }
+    .singin__locations{
+        position: relative;
+        padding-top: 1rem;
+        @media screen and (max-width:1500px) {
+            display: block;
+            // width: 100%;
+            .access__button{
+                width: 100%;
+            }
+        }
+    }
+}
