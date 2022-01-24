@@ -1,3 +1,4 @@
+
 import { Injectable, NgZone } from '@angular/core';
 import {
   signInWithPopup,
@@ -9,6 +10,7 @@ import {
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { NotificationsService } from '../main/services/notifications.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +21,8 @@ export class AuthenticateService {
   constructor(
     public router: Router,
     private auth: Auth,
-    public ngZone: NgZone
+    public ngZone: NgZone,
+    private notifS:NotificationsService
   ) {}
 
   OAuthProvider(provider: any) {
@@ -38,13 +41,15 @@ export class AuthenticateService {
   GoogleAuth() {
     return this.OAuthProvider(new GoogleAuthProvider())
       .then((res) => {
-        console.log('Successfully logged in!');
-    
+        this.notifS.sendSuccess('Successfully logged in!')
+        this.user$.next(res.user)
 
         this.router.navigate(['/']);
       })
       .catch((error) => {
         console.log(error);
+        this.notifS.sendWarning('An error occured while logging in!')
+
       });
   }
   isAuthenticated() {
