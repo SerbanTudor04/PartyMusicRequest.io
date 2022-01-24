@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field'; 
 import {MatInputModule} from '@angular/material/input';
 import { PartyViewComponent } from './party-view.component'; 
+import { AuthenticateService } from '../auth/authenticate.service';
 @NgModule({
   declarations: [
     MainComponent,
@@ -29,6 +30,7 @@ import { PartyViewComponent } from './party-view.component';
     FormsModule,
     MatFormFieldModule,
     MatInputModule
-  ]
+  ],
+  providers:[AuthenticateService]
 })
 export class MainModule { }
