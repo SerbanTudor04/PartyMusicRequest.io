@@ -4,3 +4,15 @@
     background-attachment: fixed;
     background-size: cover;
 }
+::ng-deep .notif-class-success{
+    background-color:white;
+    color:#016319;
+  }
+::ng-deep .notif-class-danger{
+    background-color:white;
+    color:rgb(255, 0, 0);
+  }
+  ::ng-deep .notif-class-warning{
+    background-color:white;
+    color:orange;
+  }
