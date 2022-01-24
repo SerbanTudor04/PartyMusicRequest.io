@@ -34,5 +34,12 @@ export class MainScreenComponent implements OnInit {
 
 
   }
+  createParty(){
+    if(!(this.create_party_data.name && this.create_party_data.description && this.create_party_data.end_date))
+
+    this.loading_bar=true
+    this.partyS.createParty(this.create_party_data.name,this.create_party_data.description,this.create_party_data.end_date)
+    this.loading_bar=false
+  }
 
 }

@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard, canActivate, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
-// const redirectLoggedInToSendEmail = () => redirectLoggedInTo(['send-email']);
 
 const routes: Routes = [
   {path:"",component:AppComponent,children:[
@@ -13,12 +12,9 @@ const routes: Routes = [
       loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
     },
     {
-      path: 'main',
+      path: '',
       loadChildren: () => import('./main/main.module').then((m) => m.MainModule),
      canActivate:[AuthGuard] 
-    },
-    {
-      path:"",redirectTo:"main",pathMatch:"full"
     }
   ]}
 ];

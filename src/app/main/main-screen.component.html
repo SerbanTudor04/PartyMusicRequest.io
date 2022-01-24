@@ -42,23 +42,27 @@
                     <mat-card-content>
                         <div class="party__code__input">
                             <div class="form-submit-class">
-                                <mat-form-field  appearance="legacy">
+                                <mat-form-field  color="primary"  appearance="legacy">
                                     <mat-label>Name</mat-label>
-                                    <input [(ngModel)]="create_party_data.name" required matInput maxlength="10" placeholder="Ex. 1234567" >
+                                    <input [(ngModel)]="create_party_data.name" required matInput maxlength="32" placeholder="Ex. My Birthday" >
                                 </mat-form-field>
-                                <mat-form-field  appearance="legacy">
+                                <mat-form-field  color="primary" appearance="legacy">
+
                                     <mat-label>End Date</mat-label>
-                                    <input [(ngModel)]="create_party_data.end_date" required matInput maxlength="10" placeholder="Ex. 1234567">
+                                    <input  [(ngModel)]="create_party_data.end_date" matInput required  [matDatepicker]="picker" >
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <!-- <input [(ngModel)]="create_party_data.end_date" required matInput maxlength="10" placeholder="Ex. 1234567"> -->
                                 </mat-form-field>
-                                <mat-form-field  appearance="legacy">
+                                <mat-form-field  color="primary"  appearance="legacy">
                                     <mat-label>Description</mat-label>
-                                    <textarea [(ngModel)]="create_party_data.description" matInput  placeholder="Ex. 1234567"></textarea>
+                                    <textarea [(ngModel)]="create_party_data.description" matInput  placeholder="Ex. everybody is welcome"></textarea>
                                 </mat-form-field>
                             </div>
                         </div>
                     </mat-card-content>
                     <mat-card-actions align="end">
-                        <button color="primary" mat-raised-button>Create <mat-icon>add</mat-icon></button>
+                        <button color="primary" mat-raised-button (click)="createParty()">Create <mat-icon>add</mat-icon></button>
                         <button mat-raised-button color="warn" (click)="create_party=false">Back <mat-icon>arrow_back</mat-icon></button>
                     </mat-card-actions>
                 </div>

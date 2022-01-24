@@ -3,22 +3,21 @@ import { CommonModule } from '@angular/common';
 
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
-import {MatCardModule} from '@angular/material/card'; 
-import {MatButtonModule} from '@angular/material/button'; 
-import {MatIconModule} from '@angular/material/icon';
-import { MainScreenComponent } from './main-screen.component'; 
-import {MatProgressBarModule} from '@angular/material/progress-bar'; 
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MainScreenComponent } from './main-screen.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field'; 
-import {MatInputModule} from '@angular/material/input';
-import { PartyViewComponent } from './party-view.component'; 
-import { AuthenticateService } from '../auth/authenticate.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { PartyViewComponent } from './party-view.component';
+
+import {MatDatepickerModule} from '@angular/material/datepicker'; 
+import { MatNativeDateModule } from '@angular/material/core';
+
 @NgModule({
-  declarations: [
-    MainComponent,
-    MainScreenComponent,
-    PartyViewComponent
-  ],
+  declarations: [MainComponent, MainScreenComponent, PartyViewComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -29,8 +28,10 @@ import { AuthenticateService } from '../auth/authenticate.service';
     ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  providers:[AuthenticateService]
+  providers: [],
 })
-export class MainModule { }
+export class MainModule {}
