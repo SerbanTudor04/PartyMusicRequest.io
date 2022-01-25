@@ -57,13 +57,6 @@ export class AuthenticateService {
       .then((res) => {
         this.notifS.sendSuccess('Successfully logged in!')
         this.user$.next(res.user)
-        getIdToken(res.user).then(
-          (r)=>{
-            console.log(r);
-            localStorage.setItem('idToken',r)
-            
-          }
-        )
         this.router.navigate(['/']);
       })
       .catch((error) => {
