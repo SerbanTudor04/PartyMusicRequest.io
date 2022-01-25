@@ -29,7 +29,7 @@ export class MainScreenComponent implements OnInit {
     if(this.party_code.length==0)return;
 
     this.loading_bar=!this.loading_bar
-    this.partyS.makeJoinParty()
+    this.partyS.makeJoinParty(this.party_code)
     this.loading_bar=!this.loading_bar
 
 

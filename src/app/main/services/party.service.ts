@@ -1,17 +1,63 @@
+import { Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
-import { doc, collection } from '@angular/fire/firestore';
+import { collection } from '@angular/fire/firestore';
 import { PartyModel } from './../../shared/party';
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import { addDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  where,
+  query,
+  getDocs,
+  doc,
+  setDoc,
+} from 'firebase/firestore';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PartyService {
-  constructor(private afs: Firestore,private aauth:Auth) {}
+  constructor(
+    private afs: Firestore,
+    private aauth: Auth,
+    private router: Router,
+    private notif: NotificationsService
+  ) {}
 
-  makeJoinParty() {}
+  async makeJoinParty(join_code: string) {
+    const coll = collection(this.afs, 'partys');
+    const q = query(coll, where('join_code', '==', join_code));
+    const q_data = await getDocs(q);
+    if (q_data.empty) {
+      this.notif.sendDanger('The entered code is invalid!');
+      return;
+    }
+    let docID = q_data.docs[0].id;
+
+    let data: any = q_data.docs[0].data();
+
+    let q_doc = doc(this.afs, `partys/${docID}`);
+
+    let isInParty = false;
+    for (let i in data.members) {
+      if (data.members[i].uid == this.aauth.currentUser?.uid) {
+        isInParty = true;
+      }
+    }
+
+    if (!isInParty) {
+      data.members.push({
+        uid: String(this.aauth.currentUser?.uid),
+        joined_on: String(this.getCurrentDateTime()),
+      });
+
+      setDoc(q_doc, data);
+      this.notif.sendSuccess(`Welcome to ${data.name} `);
+    } else this.notif.sendWarning('You are already in this party!');
+
+    this.router.navigate(['pv', data.join_code]);
+  }
 
   createParty(name: string, description: string, end_date: string) {
     const coll = collection(this.afs, 'partys');
@@ -19,24 +65,29 @@ export class PartyService {
     const data: PartyModel = {
       name: name,
       description: description,
-      end_date: end_date,
+      end_date: String(end_date),
       join_code: this.generateJoinCode(),
-      created_by:this.aauth.currentUser?.uid ?? "",
-      created_on:this.getCurrentDateTime(),
-      members:[{uid:this.aauth.currentUser?.uid ?? "",joined_on:this.getCurrentDateTime()}]
+      created_by: this.aauth.currentUser?.uid ?? '',
+      created_on: this.getCurrentDateTime(),
+      members: [
+        {
+          uid: this.aauth.currentUser?.uid ?? '',
+          joined_on: this.getCurrentDateTime(),
+        },
+      ],
     };
 
     addDoc(coll, data)
-      .then((response) => {
-        console.log(response);
-      })
+      // .then((response) => {
+      //   console.log(response);
+      // })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  private getCurrentDateTime():string{
-    let dateTime = new Date()
+  private getCurrentDateTime(): string {
+    let dateTime = new Date();
     return dateTime.toUTCString();
   }
 
