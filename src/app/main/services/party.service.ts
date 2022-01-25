@@ -21,7 +21,9 @@ export class PartyService {
       description: description,
       end_date: end_date,
       join_code: this.generateJoinCode(),
-      created_by:this.aauth.currentUser?.uid ?? ""
+      created_by:this.aauth.currentUser?.uid ?? "",
+      created_on:this.getCurrentDateTime(),
+      members:[{uid:this.aauth.currentUser?.uid ?? "",joined_on:this.getCurrentDateTime()}]
     };
 
     addDoc(coll, data)
@@ -31,6 +33,11 @@ export class PartyService {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  private getCurrentDateTime():string{
+    let dateTime = new Date()
+    return dateTime.toUTCString();
   }
 
   private generateJoinCode(length: number = 8): string {
