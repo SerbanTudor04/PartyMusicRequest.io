@@ -1,0 +1,17 @@
+.pv__container{
+    position: absolute;
+    width: 100%;
+    top: 10%;
+
+    .pv__blocks{
+        padding-top: 1rem;
+    }
+
+    @media screen and (min-width:1000px) {
+        width: 60%;
+        left: 50%;
+        top: 10%;
+        transform: translate(-50%,0%);   
+    }
+
+}

@@ -4,14 +4,7 @@ import { collection } from '@angular/fire/firestore';
 import { PartyModel } from './../../shared/party';
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import {
-  addDoc,
-  where,
-  query,
-  getDocs,
-  doc,
-  setDoc,
-} from 'firebase/firestore';
+import { addDoc, where, query, getDocs, doc, setDoc } from 'firebase/firestore';
 import { NotificationsService } from './notifications.service';
 
 @Injectable({
@@ -26,25 +19,20 @@ export class PartyService {
   ) {}
 
   async makeJoinParty(join_code: string) {
-    const coll = collection(this.afs, 'partys');
-    const q = query(coll, where('join_code', '==', join_code));
-    const q_data = await getDocs(q);
+    const q_data: any = await this.getDocumentByPartyCode(join_code);
+
     if (q_data.empty) {
       this.notif.sendDanger('The entered code is invalid!');
       return;
     }
-    let docID = q_data.docs[0].id;
 
+    // get the desired document
+    let docID = q_data.docs[0].id;
     let data: any = q_data.docs[0].data();
 
     let q_doc = doc(this.afs, `partys/${docID}`);
 
-    let isInParty = false;
-    for (let i in data.members) {
-      if (data.members[i].uid == this.aauth.currentUser?.uid) {
-        isInParty = true;
-      }
-    }
+    let isInParty = this.checkIfUserIsInParty(data)
 
     if (!isInParty) {
       data.members.push({
@@ -77,14 +65,47 @@ export class PartyService {
       ],
     };
 
-    addDoc(coll, data)
-      // .then((response) => {
-      //   console.log(response);
-      // })
-      .catch((error) => {
-        console.log(error);
-      });
+    addDoc(coll, data).then(res=>{
+
+      this.router.navigate(['pv',data.join_code])
+      
+    }).catch((error) => {
+      console.log(error);
+    });
+
+
+
   }
+
+  async getPartyData(join_code: string) {
+    const q_data= await this.getDocumentByPartyCode(join_code);
+    
+    if (q_data.empty ) {
+      this.notif.sendDanger('The entered code is invalid!');
+
+      return {hasAccess:false};
+    }
+
+    let data= q_data.docs[0].data()
+    let retVal={
+      hasAccess:this.checkIfUserIsInParty(data),
+      data:{},
+      doc_uid:"",
+    }
+    
+
+    if (!retVal.hasAccess) {
+      return retVal;
+    }
+  
+    
+    retVal.data=data
+    retVal.doc_uid=q_data.docs[0].id
+
+    return retVal
+  }
+
+  // aux functions
 
   private getCurrentDateTime(): string {
     let dateTime = new Date();
@@ -101,4 +122,23 @@ export class PartyService {
     }
     return result;
   }
+
+  private async getDocumentByPartyCode(join_code: string) {
+    // make a query for the desired party
+    const coll = collection(this.afs, 'partys');
+    const q = query(coll, where('join_code', '==', join_code));
+    const q_data = await getDocs(q);
+
+    return q_data;
+  }
+  private checkIfUserIsInParty(data:any):boolean{
+    let isInParty = false;
+    for (let i in data.members) {
+      if (data.members[i].uid == this.aauth.currentUser?.uid) {
+        isInParty = true;
+      }
+    }
+    return isInParty
+  }
 }
+
