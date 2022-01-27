@@ -5,9 +5,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
-  authState,
   Auth,
-  getIdToken
 
 
 } from '@angular/fire/auth';

@@ -12,6 +12,9 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { firebase } from 'src/environments/firebase_config';
 import {MatIconModule} from '@angular/material/icon'; 
 import {MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/material/snack-bar'; 
+
+
+
 @NgModule({
   declarations: [
     AppComponent
@@ -26,7 +29,7 @@ import {MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/materia
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},],
   bootstrap: [AppComponent]

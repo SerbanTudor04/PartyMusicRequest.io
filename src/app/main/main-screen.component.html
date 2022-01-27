@@ -56,7 +56,7 @@
                                 </mat-form-field>
                                 <mat-form-field  color="primary"  appearance="legacy">
                                     <mat-label>Description</mat-label>
-                                    <textarea [(ngModel)]="create_party_data.description" matInput  placeholder="Ex. everybody is welcome"></textarea>
+                                    <textarea required [(ngModel)]="create_party_data.description" matInput  placeholder="Ex. everybody is welcome"></textarea>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -67,8 +67,6 @@
                     </mat-card-actions>
                 </div>
             </div>
-            <mat-card-footer *ngIf="loading_bar">
-                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-            </mat-card-footer>
+
     </mat-card>
 </div>
