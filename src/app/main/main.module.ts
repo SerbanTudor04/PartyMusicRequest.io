@@ -12,11 +12,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PartyViewComponent } from './party-view.component';
-
+import {ClipboardModule} from '@angular/cdk/clipboard'; 
 import {MatDatepickerModule} from '@angular/material/datepicker'; 
 import { MatNativeDateModule } from '@angular/material/core';
-
-
+import {MatTooltipModule} from '@angular/material/tooltip'; 
+import {MatTableModule} from '@angular/material/table'; 
 @NgModule({
   declarations: [MainComponent, MainScreenComponent, PartyViewComponent],
   imports: [
@@ -31,7 +31,10 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTooltipModule,
+    ClipboardModule,
+    MatTableModule
   ],
   providers: [],
 })

@@ -7,7 +7,7 @@ import { PartyViewComponent } from './party-view.component';
 const routes: Routes = [
   { path: '', component: MainComponent,children:[
     {path:"",component:MainScreenComponent},
-    {path:"pv/:join_code",component:PartyViewComponent},
+    {path:"pv/:partyID",component:PartyViewComponent},
 
   ] }
 ];
