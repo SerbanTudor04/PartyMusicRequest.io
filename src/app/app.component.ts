@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ConfigService } from './main/services/config.service';
 
 
 @Component({
@@ -8,5 +9,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'pmr';
+  constructor(public configS:ConfigService){}
   
 }

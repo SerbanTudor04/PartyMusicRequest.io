@@ -1,4 +1,4 @@
-@import '../../theme.scss';
+@import '../../themes/theme.scss';
 
 .btn-width-100{
     width: 100% !important;
@@ -21,4 +21,13 @@
 }
 .no_bg{
     background: transparent;
+}
+.center__middle{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.display__flex{
+    display: flex;
 }

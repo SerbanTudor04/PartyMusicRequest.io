@@ -2,56 +2,59 @@
 <div class="pv__container">
     <div *ngIf="hasAccess" class="pv__hasAccess">
         <div class="pv__header pv__blocks">
-            <mat-card class="mat-elevation-z0 no_bg">
+            <ion-card class="mat-elevation-z0 no_bg">
 
 
 
-                <mat-card-title style="text-align: center;">{{party_data.data.name}}</mat-card-title>
-                <mat-card-content>
+                <ion-card-title style="text-align: center;">{{party_data.data.name}}</ion-card-title>
+                <ion-card-content>
                     <div class="pv__header__description">
                         <h2>{{party_data.data.description}}</h2>
                     </div>
                     <div class="pv__header__partyInfo">
                         <p>Party created by {{party_data.data.created_by_displayName ?? "User"}} on {{party_data.data.created_on | date}}, which is ending on {{party_data.data.end_date | date }}.</p>
                     </div>
-                </mat-card-content>
-            </mat-card>
+                </ion-card-content>
+            </ion-card>
     
         </div>
         <div class="pv__body pv__blocks">
-            <mat-card>
-                <mat-card-title>
+            <ion-card>
+                <ion-card-title>
                     <div class="pv__top__menu">
                         <!-- add song buttons -->
                         <div class="pv__top__menu__btns">
-                            <button matTooltip="Add a song" *ngIf="!add_song" (click)="add_song=true" mat-mini-fab color="primary"><mat-icon>add</mat-icon></button>
-                            <button matTooltip="Close menu" *ngIf="add_song" (click)="add_song=false" mat-mini-fab color="warn"><mat-icon>close</mat-icon></button>     
-                            <button matTooltip="Copy join code" class="btn-margin-left" mat-mini-fab color="default" (click)="notifS.sendSuccess('Join code has been copied in clipboard!');" [cdkCopyToClipboard]="party_data.data.join_code" ><mat-icon>qr_code_scanner</mat-icon></button>
+                            <!-- add a song -->
+                            <ion-button shape="round" matTooltip="Add a song" *ngIf="!add_song" (click)="add_song=true"  color="primary"><mat-icon>add</mat-icon></ion-button>
+                            <ion-button shape="round"  matTooltip="Close menu" *ngIf="add_song" (click)="add_song=false" color="danger"><mat-icon>close</mat-icon></ion-button> 
+                            
+                            <!-- get join code -->
+                            <ion-button shape="round"  matTooltip="Copy join code" class="btn-margin-left"  color="default" (click)="notifS.sendSuccess('Join code has been copied in clipboard!');" [cdkCopyToClipboard]="party_data.data.join_code" ><mat-icon>qr_code_scanner</mat-icon></ion-button>
 
                         </div>
                         <div *ngIf="add_song"  class="pv__add_song pv__blocks">
-                            <mat-card class="mat-elevation-z0">                 
-                                <mat-card-content>
+                            <ion-card class="mat-elevation-z0">                 
+                                <ion-card-content>
                                     <div class="form-submit-class">
-                                        <mat-form-field  color="primary"  appearance="legacy">
-                                            <mat-label>Name</mat-label>
-                                            <input [(ngModel)]="song_add_data.song_name"  required matInput maxlength="64" placeholder="Ex. Are you with me?" >
-                                        </mat-form-field>
-                                        <mat-form-field  color="primary"  appearance="legacy">
-                                            <mat-label>Author</mat-label>
-                                            <input  [(ngModel)]="song_add_data.song_author"   required matInput maxlength="64" placeholder="Ex. Lost Frequencies" >
-                                        </mat-form-field>
+                                        <ion-item >
+                                            <ion-label>Name</ion-label>
+                                            <ion-input [(ngModel)]="song_add_data.song_name"  required matInput maxlength="64" placeholder="Ex. Are you with me?" ></ion-input>
+                                        </ion-item>
+                                        <ion-item    >
+                                            <ion-label>Author</ion-label>
+                                            <ion-input  [(ngModel)]="song_add_data.song_author"   required matInput maxlength="64" placeholder="Ex. Lost Frequencies" ></ion-input>
+                                        </ion-item>
                                     </div>
-                                </mat-card-content>
-                                <mat-card-actions>
-                                    <button matTooltip="Send data" (click)="addSong()" color="primary" class="btn-width-100" mat-raised-button>Add <mat-icon >library_music</mat-icon></button>
-                                </mat-card-actions>
-                            </mat-card>
+                                    <ion-button  shape="round" matTooltip="Send data" (click)="addSong()" color="primary" class="btn-width-100">Add <mat-icon >library_music</mat-icon></ion-button>
+
+                                </ion-card-content>
+                   
+                            </ion-card>
                         </div>
                     </div>
-                </mat-card-title>
-                <mat-card-content class="songs__table__list">
-                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+                </ion-card-title>
+                <ion-card-content class="songs__table__list">
+                        <table  mat-table [dataSource]="dataSource" class="mat-elevation-z0">
 
                             <ng-container matColumnDef="song_name">
                                 <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -89,19 +92,21 @@
 
 
 
-                </mat-card-content>
-            </mat-card>
+                </ion-card-content>
+            </ion-card>
         </div>
        
     </div>
     <div *ngIf="!hasAccess"  class="pv__noAccess">
-        <mat-card>
-            <mat-card-title style="color:red">You are not a member of this party yet</mat-card-title>
-            <mat-card-subtitle>Access forbidden</mat-card-subtitle>
-            <mat-card-actions>
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title style="color:red">You are not a member of this party yet</ion-card-title>
+                <ion-card-subtitle>Access forbidden</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
                 <a href="/" color="primary" style="width:100%" mat-raised-button>Go home</a>
-            </mat-card-actions>
-        </mat-card>
+            </ion-card-content>
+        </ion-card>
     </div>
 
 </div>

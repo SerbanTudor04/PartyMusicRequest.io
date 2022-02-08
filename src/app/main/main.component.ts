@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfigService } from './services/config.service';
 import { LoadingBarService } from './services/loading-bar.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { LoadingBarService } from './services/loading-bar.service';
 })
 export class MainComponent implements OnInit {
 
-  constructor(public loadingS:LoadingBarService) { }
+  constructor(public loadingS:LoadingBarService,public configS:ConfigService) { }
 
   ngOnInit(): void {
   }

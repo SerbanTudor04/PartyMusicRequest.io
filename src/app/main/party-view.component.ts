@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LoadingBarService } from './services/loading-bar.service';
 import { NotificationsService } from './services/notifications.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-party-view',
@@ -20,6 +21,8 @@ export class PartyViewComponent implements OnInit {
 
   add_song: boolean = false;
 
+  is_owner:boolean=false;
+
   song_add_data = {
     song_name: '',
     song_author: '',
@@ -32,7 +35,8 @@ export class PartyViewComponent implements OnInit {
     private partyS: PartyService,
     private route: ActivatedRoute,
     private loadingS: LoadingBarService,
-    public notifS:NotificationsService
+    public notifS:NotificationsService,
+    private aauth:Auth
   ) {
     this.partyid_code = String(this.route.snapshot.paramMap.get('partyID'));
   }
@@ -46,6 +50,8 @@ export class PartyViewComponent implements OnInit {
 
     this.dataSource.data=this.party_data.data.songs;
     this.hasAccess = this.party_data.hasAccess;
+    if(this.party_data.data.created_by==this.aauth.currentUser?.uid)
+      this.is_owner=true;
   }
 
   addSong() {

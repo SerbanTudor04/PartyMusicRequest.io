@@ -12,7 +12,9 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { firebase } from 'src/environments/firebase_config';
 import {MatIconModule} from '@angular/material/icon'; 
 import {MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/material/snack-bar'; 
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
+import { RouteReuseStrategy } from '@angular/router';
 
 
 @NgModule({
@@ -28,10 +30,11 @@ import {MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/materia
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
+    IonicModule.forRoot(),
     MatIconModule,
     MatSnackBarModule,
   ],
-  providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},],
+  providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

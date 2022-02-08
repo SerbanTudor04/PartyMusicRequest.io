@@ -1,7 +1,29 @@
 
+<ion-toolbar>
+    <ion-title>{{configS.application_name}}</ion-title>
+    <ion-buttons  slot="secondary">
+        <!-- <ion-button shape="round">  <mat-icon >search</mat-icon></ion-button> -->
 
+        <!-- <ion-toggle [checked]="configS.is_dark" (click)="configS.change_mode()"  [color]="configS.mode"></ion-toggle>
+        <ion-label *ngIf="configS.mode=='light'"><mat-icon>light_mode</mat-icon></ion-label>
+        <ion-label *ngIf="configS.mode=='dark'"><mat-icon>dark_mode</mat-icon></ion-label> -->
+
+        <ion-button disabled="true" (click)="configS.change_mode()" shape="round">
+            <mat-icon  *ngIf="!configS.is_dark">light_mode</mat-icon>
+            <mat-icon *ngIf="configS.is_dark">dark_mode</mat-icon>
+        </ion-button>
+
+
+    </ion-buttons>
+  </ion-toolbar>
 <div class="main__app__container">
     <div class="main__app__content">
-        <router-outlet></router-outlet>
+        <ion-app>
+            <ion-router-outlet></ion-router-outlet>
+        </ion-app>
+        <!-- <router-outlet></router-outlet> -->
     </div>
 </div>
+
+
+  

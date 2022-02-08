@@ -1,7 +1,19 @@
 
 <div *ngIf="loadingS.isLoading==true" class="">
-   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+   <ion-progress-bar mode="indeterminate"></ion-progress-bar>
 </div>
 <div class="mainapp__container">
-   <router-outlet></router-outlet>
+   
+   <ion-router-outlet></ion-router-outlet>
+
 </div>
+
+<ion-footer collapse="fade">
+   <ion-toolbar class="display_flex">
+      <ion-buttons slot="primary">
+         <ion-button target="blank" href="https://github.com/SerbanTudor04/PartyMusicRequest.io">
+           Github <img width="32" height="32 " src="../../assets/github.png" alt="">
+         </ion-button>
+       </ion-buttons>
+   </ion-toolbar>
+ </ion-footer>

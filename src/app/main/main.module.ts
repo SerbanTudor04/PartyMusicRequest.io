@@ -17,25 +17,22 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatTooltipModule} from '@angular/material/tooltip'; 
 import {MatTableModule} from '@angular/material/table';
-import { PartyViewCreatorComponent } from './party-view-creator.component'; 
+
+
+import {IonicModule} from '@ionic/angular'
+
 @NgModule({
-  declarations: [MainComponent, MainScreenComponent, PartyViewComponent, PartyViewCreatorComponent],
+  declarations: [MainComponent, MainScreenComponent, PartyViewComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
-    MatCardModule,
-    MatButtonModule,
     MatIconModule,
     MatProgressBarModule,
     ReactiveFormsModule,
     FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatTooltipModule,
     ClipboardModule,
-    MatTableModule
+    MatTableModule,
+    IonicModule
   ],
   providers: [],
 })

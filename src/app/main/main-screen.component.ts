@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PartyService } from './services/party.service';
+import { format, parseISO } from 'date-fns';
 
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {FormControl} from '@angular/forms';
+
 import { LoadingBarService } from './services/loading-bar.service';
 export const MY_FORMATS = {
   parse: {
@@ -90,4 +91,7 @@ export class MainScreenComponent implements OnInit {
     )
   }
 
+  formatDate(value: any) {
+    return format(parseISO(value), 'MMM dd yyyy');
+  }
 }

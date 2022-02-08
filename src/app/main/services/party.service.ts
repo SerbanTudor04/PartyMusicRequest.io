@@ -220,9 +220,9 @@ export class PartyService {
   private makeRedirect2Party(created_by_uid: string, partyID: string) {
     // redirects to Party View or Party View Creator
 
-    if(this.aauth.currentUser?.uid == created_by_uid)
-      this.router.navigate(['pvc',partyID])
-    else
+    // if(this.aauth.currentUser?.uid == created_by_uid)
+    //   this.router.navigate(['pvc',partyID])
+    // else
       this.router.navigate(['pv',partyID])
 
 

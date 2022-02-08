@@ -1,72 +1,90 @@
 <div class="main__screen__container">
-    <mat-card class="main__screen__card">
+    <ion-card type="ios" class="main__screen__card">
         <div *ngIf="!join_party && !create_party ">
-            <mat-card-content>
+            <ion-card-content>
                 <div class="main__screen__buttons">
                     <section>
-                        <button (click)="join_party=!join_party" class="btn-width-100" color="primary" mat-raised-button>Join Party <mat-icon>celebration</mat-icon></button>
+                        <ion-button shape="round" expand="block" (click)="join_party=!join_party" class="btn-width-100" color="primary" >Join Party <mat-icon>celebration</mat-icon></ion-button>
                     </section>
                     <section>
-                        <button (click)="create_party=!create_party" class="btn-width-100 btn-margin-top" color="primary" mat-raised-button>Create Party <mat-icon>cake</mat-icon></button>    
+                        <ion-button  shape="round" expand="block"(click)="create_party=!create_party" class="btn-width-100 btn-margin-top" color="primary" >Create Party <mat-icon>cake</mat-icon></ion-button>    
                     </section>
                 </div>
-            </mat-card-content>
+            </ion-card-content>
         </div>
 
         <div *ngIf="join_party && !create_party" class="main__screen__join_party">
-            <mat-card-title>Join Party</mat-card-title>
-            <mat-card-subtitle>Enter the party code</mat-card-subtitle>
+            <ion-card-header>
+                <ion-card-title>Join Party</ion-card-title>
+                <ion-card-subtitle>Enter the party code</ion-card-subtitle>
+            </ion-card-header>
             <div class="party__form">
-                <mat-card-content>
+                <ion-card-content>
                     <div class="party__code__input">
                         <div class="form-submit-class">
-                            <mat-form-field  appearance="legacy">
-                                <mat-label>Party code</mat-label>
-                                <input [(ngModel)]="party_code" required matInput maxlength="10" placeholder="Ex. 1234567">
-                            </mat-form-field>
-
+                            <ion-item>
+                                <ion-label>Party code</ion-label>
+                                <ion-input [(ngModel)]="party_code" required matInput maxlength="10" placeholder="Ex. 1234567"></ion-input>
+                            </ion-item>
                         </div>
 
                     </div>
-                </mat-card-content>
-                <mat-card-actions align="end">
-                    <button color="primary" (click)="joinParty()" mat-raised-button>Join <mat-icon>login</mat-icon></button>
-                    <button mat-raised-button color="warn" (click)="join_party=false">Back <mat-icon>arrow_back</mat-icon></button>
-                </mat-card-actions>
+                    <ion-button shape="round"  color="primary" (click)="joinParty()" >Join <mat-icon>login</mat-icon></ion-button>
+                    <ion-button shape="round"   class="btn-margin-left" color="danger" (click)="join_party=false">Back <mat-icon>arrow_back</mat-icon></ion-button>
+                </ion-card-content>
+
             </div>
         </div>
             <div *ngIf="!join_party && create_party" class="main__screen__create_party">
-                <mat-card-title>Create Party</mat-card-title>
-                <mat-card-subtitle>Enter the party informations</mat-card-subtitle>
+                <ion-card-header>
+                    <ion-card-title>Create Party</ion-card-title>
+                    <ion-card-subtitle>Enter the party informations</ion-card-subtitle>
+                </ion-card-header>
+            
+                
                 <div class="party__form">
-                    <mat-card-content>
+                    <ion-card-content>
                         <div class="party__code__input">
                             <div class="form-submit-class">
-                                <mat-form-field  color="primary"  appearance="legacy">
-                                    <mat-label>Name</mat-label>
-                                    <input [(ngModel)]="create_party_data.name" required matInput maxlength="32" placeholder="Ex. My Birthday" >
-                                </mat-form-field>
-                                <mat-form-field  color="primary" appearance="legacy">
+                           
+                                  <ion-item>
+                                    <ion-label>Name</ion-label>
+                                    <ion-input [(ngModel)]="create_party_data.name" required matInput maxlength="32" placeholder="Ex. My Birthday" ></ion-input>
+                                  </ion-item>
+                                <ion-item class="">        
+                                                                  
+                                        <ion-label>End date</ion-label>
+                                        <div class="display__flex">
+                                            <ion-input required placeholder="Ex: 1/1/1989" [value]="create_party_data.end_date"></ion-input>
+                                            <ion-button shape="round" color="primary" fill="clear" id="open-date-input-2">
+                                              <mat-icon>event</mat-icon>
+                                            </ion-button>
+                                        </div>
+                                      
+                                        <ion-popover trigger="open-date-input-2" show-backdrop="false">
+                                          <ng-template>
+                                            <ion-datetime
+                                              #popoverDatetime2
+                                              presentation="date"
+                                              (ionChange)="create_party_data.end_date = formatDate(popoverDatetime2.value)"
+                                            ></ion-datetime>
+                                          </ng-template>
+                                        </ion-popover>
 
-                                    <mat-label>End Date</mat-label>
-                                    <input  [(ngModel)]="create_party_data.end_date" matInput required  [matDatepicker]="picker" >
-                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                    <!-- <input [(ngModel)]="create_party_data.end_date" required matInput maxlength="10" placeholder="Ex. 1234567"> -->
-                                </mat-form-field>
-                                <mat-form-field  color="primary"  appearance="legacy">
-                                    <mat-label>Description</mat-label>
-                                    <textarea required [(ngModel)]="create_party_data.description" matInput  placeholder="Ex. everybody is welcome"></textarea>
-                                </mat-form-field>
+                                </ion-item>
+               
+                                <ion-item  >
+                                    <ion-label>Description</ion-label>
+                                    <ion-textarea  [(ngModel)]="create_party_data.description" matInput  placeholder="Ex. everybody is welcome"></ion-textarea>
+                                </ion-item>
                             </div>
                         </div>
-                    </mat-card-content>
-                    <mat-card-actions align="end">
-                        <button color="primary" mat-raised-button (click)="createParty()">Create <mat-icon>add</mat-icon></button>
-                        <button mat-raised-button color="warn" (click)="create_party=false">Back <mat-icon>arrow_back</mat-icon></button>
-                    </mat-card-actions>
+                        <ion-button shape="round" color="primary" mat-raised-button (click)="createParty()">Create <mat-icon>add</mat-icon></ion-button>
+                        <ion-button  shape="round" class="btn-margin-left" mat-raised-button color="danger" (click)="create_party=false">Back <mat-icon>arrow_back</mat-icon></ion-button>
+                    </ion-card-content>
+
                 </div>
             </div>
 
-    </mat-card>
+    </ion-card>
 </div>
