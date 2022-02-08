@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard, canActivate, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
-
+// const redirectAuthorizedToApp=()=> redirectLoggedInTo(['/'])
 const routes: Routes = [
   {path:"",component:AppComponent,children:[
     {
@@ -14,7 +14,8 @@ const routes: Routes = [
     {
       path: '',
       loadChildren: () => import('./main/main.module').then((m) => m.MainModule),
-     canActivate:[AuthGuard] 
+     canActivate:[AuthGuard],
+     data: {authGuardPipe:redirectUnauthorizedToLogin} 
     }
   ]}
 ];

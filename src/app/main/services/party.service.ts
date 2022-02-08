@@ -85,7 +85,7 @@ export class PartyService {
     };
 
     const response_doc: any = await addDoc(coll, data)
-      .then((res) => this.makeRedirect2Party(data.created_by, response_doc.id))
+      .then((res) => this.makeRedirect2Party(data.created_by, res.id))
       .catch((error) => {
         console.log(error);
       });
@@ -131,7 +131,9 @@ export class PartyService {
       song_author: song_author,
       song_name: song_name,
     };
-
+    if(ret_data.songs==undefined)
+      ret_data.songs=[]
+    
     ret_data.songs.push(song_info);
 
     await setDoc(q_doc, ret_data)
