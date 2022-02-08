@@ -1,6 +1,6 @@
 {
   "name": "pmr",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "SerbanTudorGabriel",
   "scripts": {
     "ng": "ng",
@@ -35,6 +35,7 @@
     "dotenv": "^14.2.0",
     "firebase": "^9.6.4",
     "firebaseui": "^6.0.0",
+    "ngx-datatable": "^1.0.3",
     "os-browserify": "^0.3.0",
     "rxfire": "^6.0.0",
     "rxjs": "~7.4.0",

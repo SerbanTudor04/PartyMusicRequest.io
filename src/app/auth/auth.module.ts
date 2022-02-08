@@ -1,3 +1,4 @@
+import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -13,7 +14,8 @@ import {MatButtonModule} from '@angular/material/button';
     CommonModule,
     AuthRoutingModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    IonicModule
   ]
 })
 export class AuthModule { }

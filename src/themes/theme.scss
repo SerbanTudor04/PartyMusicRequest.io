@@ -17,6 +17,13 @@ $pmr-theme: mat.define-light-theme((
     warn: $pmr-warn,
   )
 ));
-
-
-@include mat.all-component-themes($pmr-theme);
+$pmr-dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $pmr-primary,
+      accent: $pmr-accent,
+      warn: $pmr-warn,
+    )
+  )
+);
+@include mat.all-component-themes($pmr-dark-theme);

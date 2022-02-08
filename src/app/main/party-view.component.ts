@@ -20,7 +20,7 @@ export class PartyViewComponent implements OnInit {
   partyid_code: string;
 
   add_song: boolean = false;
-
+  edit_poarty:boolean=false;
   is_owner:boolean=false;
 
   song_add_data = {

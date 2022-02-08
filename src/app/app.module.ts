@@ -25,7 +25,6 @@ import { RouteReuseStrategy } from '@angular/router';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-
     provideFirebaseApp(() => initializeApp(firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
