@@ -16,9 +16,10 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 import {MatDatepickerModule} from '@angular/material/datepicker'; 
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatTooltipModule} from '@angular/material/tooltip'; 
-import {MatTableModule} from '@angular/material/table'; 
+import {MatTableModule} from '@angular/material/table';
+import { PartyViewCreatorComponent } from './party-view-creator.component'; 
 @NgModule({
-  declarations: [MainComponent, MainScreenComponent, PartyViewComponent],
+  declarations: [MainComponent, MainScreenComponent, PartyViewComponent, PartyViewCreatorComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

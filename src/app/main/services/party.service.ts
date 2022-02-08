@@ -59,7 +59,9 @@ export class PartyService {
         `Welcome back, ${this.aauth.currentUser?.displayName}!`
       );
 
-    this.router.navigate(['pv', docID]);
+    // this.router.navigate(['pv', docID]);
+    this.makeRedirect2Party(data.created_by,docID)
+
   }
 
   async createParty(name: string, description: string, end_date: string) {
@@ -83,9 +85,7 @@ export class PartyService {
     };
 
     const response_doc: any = await addDoc(coll, data)
-      .then((res) => {
-        this.router.navigate(['pv', response_doc.id]);
-      })
+      .then((res) => this.makeRedirect2Party(data.created_by, response_doc.id))
       .catch((error) => {
         console.log(error);
       });
@@ -151,6 +151,32 @@ export class PartyService {
       });
     return song_info;
   }
+  async updatePartyInfo(partyID:string,name:string,description:string){
+    let q_doc = doc(this.afs, `partys/${partyID}`);
+    let ret_data: any = (await getDoc(q_doc)).data();
+    ret_data.name=name
+    ret_data.description=description
+
+
+    await setDoc(q_doc, ret_data)
+        .then(() => {
+          this.notif.sendSuccess(
+            `Party name was updated to ${name} and description to ${description},with success!`
+          );
+          
+        })
+        .catch((error) => {
+          console.log(error);
+          
+
+          this.notif.sendDanger(
+            `An unexpected error has occured while trying to update the party!`
+          );
+        });
+      return {name:name,description:description};
+  }
+
+
 
   // aux functions
 
@@ -187,5 +213,17 @@ export class PartyService {
       }
     }
     return isInParty;
+  }
+
+  private makeRedirect2Party(created_by_uid: string, partyID: string) {
+    // redirects to Party View or Party View Creator
+
+    if(this.aauth.currentUser?.uid == created_by_uid)
+      this.router.navigate(['pvc',partyID])
+    else
+      this.router.navigate(['pv',partyID])
+
+
+
   }
 }

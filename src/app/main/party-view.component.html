@@ -2,10 +2,19 @@
 <div class="pv__container">
     <div *ngIf="hasAccess" class="pv__hasAccess">
         <div class="pv__header pv__blocks">
-            <mat-card>
-                <mat-card-title>{{party_data.data.name}}</mat-card-title>
-                <mat-card-subtitle>{{party_data.data.description}}</mat-card-subtitle>
-                <mat-card-subtitle>Party created by {{party_data.data.created_by_displayName ?? "User"}} on {{party_data.data.created_on | date}}, which is ending on {{party_data.data.end_date | date }}.</mat-card-subtitle>  
+            <mat-card class="mat-elevation-z0 no_bg">
+
+
+
+                <mat-card-title style="text-align: center;">{{party_data.data.name}}</mat-card-title>
+                <mat-card-content>
+                    <div class="pv__header__description">
+                        <h2>{{party_data.data.description}}</h2>
+                    </div>
+                    <div class="pv__header__partyInfo">
+                        <p>Party created by {{party_data.data.created_by_displayName ?? "User"}} on {{party_data.data.created_on | date}}, which is ending on {{party_data.data.end_date | date }}.</p>
+                    </div>
+                </mat-card-content>
             </mat-card>
     
         </div>
@@ -83,13 +92,7 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="pv__footer pv__blocks">
-            <mat-card>
-                <mat-card-title></mat-card-title>
-                <mat-card-subtitle></mat-card-subtitle>
-                <mat-card-content></mat-card-content>
-            </mat-card>
-        </div>
+       
     </div>
     <div *ngIf="!hasAccess"  class="pv__noAccess">
         <mat-card>
