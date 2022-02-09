@@ -1,5 +1,8 @@
 {
-  "name": "PartyMusicRequest.io",
-  "integrations": {},
+  "name": "pmr",
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
   "type": "angular"
 }
