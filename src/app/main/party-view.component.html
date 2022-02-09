@@ -1,162 +1,164 @@
-<div class="pv__container">
-    <div *ngIf="hasAccess" class="pv__hasAccess">
-        <div class="pv__header pv__blocks">
-            <ion-card class="mat-elevation-z0 no_bg">
-
-
-
-                <ion-card-title style="text-align: center;">{{party_data.data.name}}</ion-card-title>
-                <ion-card-content>
-                    <div class="pv__header__description">
-                        <h2>{{party_data.data.description}}</h2>
-                    </div>
-                    <div class="pv__header__partyInfo">
-                        <p>Party created by {{party_data.data.created_by_displayName ?? "User"}} on
-                            {{party_data.data.created_on | date}}, which is ending on {{party_data.data.end_date | date
-                            }}.</p>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-
-        </div>
-        <div class="pv__body pv__blocks">
-            <ion-card>
-                <ion-card-title>
-                    <div class="pv__top__menu">
-                        <!-- add song buttons -->
-                        <div class="pv__top__menu__btns">
-                            <!-- add a song -->
-                            <ion-button class="btn-margin-left" shape="round"  *ngIf="!add_song" (click)="add_song=true;edit_poarty=false"
-                                color="primary">
-                                <mat-icon>add</mat-icon>
-                            </ion-button>
-                            <ion-button shape="round"  *ngIf="add_song" (click)="add_song=false"
-                                color="danger">
-                                <mat-icon>close</mat-icon>
-                            </ion-button>
-
-                       
-                                <ion-button shape="round"  *ngIf="!edit_poarty && is_owner"
-                                    (click)="edit_poarty=true;add_song=false" color="primary">
-                                    <mat-icon>edit</mat-icon>
+<ion-content>
+    <div class="pv__container">
+        <div *ngIf="hasAccess" class="pv__hasAccess">
+            <div class="pv__header pv__blocks">
+                <ion-card class="mat-elevation-z0 no_bg">
+    
+    
+    
+                    <ion-card-title style="text-align: center;">{{party_data.data.name}}</ion-card-title>
+                    <ion-card-content>
+                        <div class="pv__header__description">
+                            <h2>{{party_data.data.description}}</h2>
+                        </div>
+                        <div class="pv__header__partyInfo">
+                            <p>Party created by {{party_data.data.created_by_displayName ?? "User"}} on
+                                {{party_data.data.created_on | date}}, which is ending on {{party_data.data.end_date | date
+                                }}.</p>
+                        </div>
+                    </ion-card-content>
+                </ion-card>
+    
+            </div>
+            <div class="pv__body pv__blocks">
+                <ion-card>
+                    <ion-card-title>
+                        <div class="pv__top__menu">
+                            <!-- add song buttons -->
+                            <div class="pv__top__menu__btns">
+                                <!-- add a song -->
+                                <ion-button class="btn-margin-left" shape="round"  *ngIf="!add_song" (click)="add_song=true;edit_poarty=false"
+                                    color="primary">
+                                    <mat-icon>add</mat-icon>
                                 </ion-button>
-                                <ion-button shape="round"  *ngIf="edit_poarty  && is_owner"
-                                    (click)="edit_poarty=false" color="danger">
+                                <ion-button shape="round"  *ngIf="add_song" (click)="add_song=false"
+                                    color="danger">
                                     <mat-icon>close</mat-icon>
                                 </ion-button>
-
-                      
-                            <!-- get join code -->
-                            <ion-button shape="round"  class="btn-margin-left"
-                                color="default" (click)="notifS.sendSuccess('Join code has been copied in clipboard!');"
-                                [cdkCopyToClipboard]="party_data.data.join_code">
-                                <mat-icon>qr_code_scanner</mat-icon>
-                            </ion-button>
-
-                        </div>
-                        <div *ngIf="add_song" class="pv__add_song pv__blocks">
-                            <ion-card class="mat-elevation-z0">
-                                <ion-card-content>
-                                    <div class="form-submit-class">
-                                        <ion-item>
-                                            <ion-label>Name</ion-label>
-                                            <ion-input [(ngModel)]="song_add_data.song_name" required matInput
-                                                maxlength="64" placeholder="Ex. Are you with me?"></ion-input>
-                                        </ion-item>
-                                        <ion-item>
-                                            <ion-label>Author</ion-label>
-                                            <ion-input [(ngModel)]="song_add_data.song_author" required matInput
-                                                maxlength="64" placeholder="Ex. Lost Frequencies"></ion-input>
-                                        </ion-item>
-                                    </div>
-                                    <ion-button shape="round" matTooltip="Send data" (click)="addSong()" color="primary"
-                                        class="btn-width-100">Add <mat-icon>library_music</mat-icon>
+    
+                           
+                                    <ion-button shape="round"  *ngIf="!edit_poarty && is_owner"
+                                        (click)="edit_poarty=true;add_song=false" color="primary">
+                                        <mat-icon>edit</mat-icon>
                                     </ion-button>
-
-                                </ion-card-content>
-
-                            </ion-card>
-                        </div>
-                        <div *ngIf="edit_poarty && is_owner" class="pv__add_song pv__blocks">
-                            <ion-card class="mat-elevation-z0">
-                                <ion-card-content>
-                                    <div class="form-submit-class">
-                                        <ion-item>
-                                            <ion-label>Name</ion-label>
-                                            <ion-input [(ngModel)]="song_add_data.song_name" required matInput
-                                                maxlength="64" placeholder="Ex. Are you with me?"></ion-input>
-                                        </ion-item>
-                                        <ion-item>
-                                            <ion-label>Author</ion-label>
-                                            <ion-input [(ngModel)]="song_add_data.song_author" required matInput
-                                                maxlength="64" placeholder="Ex. Lost Frequencies"></ion-input>
-                                        </ion-item>
-                                    </div>
-                                    <ion-button shape="round" matTooltip="Send data" (click)="addSong()" color="primary"
-                                        class="btn-width-100">Add <mat-icon>library_music</mat-icon>
+                                    <ion-button shape="round"  *ngIf="edit_poarty  && is_owner"
+                                        (click)="edit_poarty=false" color="danger">
+                                        <mat-icon>close</mat-icon>
                                     </ion-button>
-
-                                </ion-card-content>
-
-                            </ion-card>
+    
+                          
+                                <!-- get join code -->
+                                <ion-button shape="round"  class="btn-margin-left"
+                                    color="default" (click)="notifS.sendSuccess('Join code has been copied in clipboard!');"
+                                    [cdkCopyToClipboard]="party_data.data.join_code">
+                                    <mat-icon>qr_code_scanner</mat-icon>
+                                </ion-button>
+    
+                            </div>
+                            <div *ngIf="add_song" class="pv__add_song pv__blocks">
+                                <ion-card class="mat-elevation-z0">
+                                    <ion-card-content>
+                                        <div class="form-submit-class">
+                                            <ion-item>
+                                                <ion-label  position="floating">Name</ion-label>
+                                                <ion-input [(ngModel)]="song_add_data.song_name" required matInput
+                                                    maxlength="64" placeholder="Ex. Are you with me?"></ion-input>
+                                            </ion-item>
+                                            <ion-item>
+                                                <ion-label  position="floating">Author</ion-label>
+                                                <ion-input [(ngModel)]="song_add_data.song_author" required matInput
+                                                    maxlength="64" placeholder="Ex. Lost Frequencies"></ion-input>
+                                            </ion-item>
+                                        </div>
+                                        <ion-button shape="round" matTooltip="Send data" (click)="addSong()" color="primary"
+                                            class="btn-width-100">Add <mat-icon>library_music</mat-icon>
+                                        </ion-button>
+    
+                                    </ion-card-content>
+    
+                                </ion-card>
+                            </div>
+                            <div *ngIf="edit_poarty && is_owner" class="pv__add_song pv__blocks">
+                                <ion-card class="mat-elevation-z0">
+                                    <ion-card-content>
+                                        <div class="form-submit-class">
+                                            <ion-item>
+                                                <ion-label  position="floating">Name</ion-label>
+                                                <ion-input [(ngModel)]="song_add_data.song_name" required matInput
+                                                    maxlength="64" placeholder="Ex. Are you with me?"></ion-input>
+                                            </ion-item>
+                                            <ion-item>
+                                                <ion-label  position="floating">Author</ion-label>
+                                                <ion-input [(ngModel)]="song_add_data.song_author" required matInput
+                                                    maxlength="64" placeholder="Ex. Lost Frequencies"></ion-input>
+                                            </ion-item>
+                                        </div>
+                                        <ion-button shape="round" matTooltip="Send data" (click)="addSong()" color="primary"
+                                            class="btn-width-100">Add <mat-icon>library_music</mat-icon>
+                                        </ion-button>
+    
+                                    </ion-card-content>
+    
+                                </ion-card>
+                            </div>
                         </div>
-                    </div>
-                </ion-card-title>
-                <ion-card-content class="songs__table__list">
-
-                    <table [bgColor]="'dark'" mat-table [dataSource]="dataSource" class="mat-elevation-z0">
-
-                        <ng-container matColumnDef="song_name">
-                            <th mat-header-cell *matHeaderCellDef> Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.song_name }} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="song_author">
-                            <th mat-header-cell *matHeaderCellDef> Author </th>
-                            <td mat-cell *matCellDef="let element"> {{element.song_author }} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="added_by_displayName">
-                            <th mat-header-cell *matHeaderCellDef> Added by </th>
-                            <td mat-cell *matCellDef="let element"> {{element.added_by_displayName}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="added_on">
-                            <th mat-header-cell *matHeaderCellDef> Added on </th>
-                            <td mat-cell *matCellDef="let element"> {{element.added_on | date}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="played">
-                            <th mat-header-cell *matHeaderCellDef> Played</th>
-                            <td mat-cell *matCellDef="let element">
-                                <span *ngIf="element.played" style="color: green;">Played</span>
-                                <span *ngIf="!element.played" style="color: red;">Not Played</span>
-                            </td>
-                        </ng-container>
-
-
-
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
-
-
-
-
+                    </ion-card-title>
+                    <ion-card-content class="songs__table__list">
+    
+                        <table [bgColor]="'dark'" mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+    
+                            <ng-container matColumnDef="song_name">
+                                <th mat-header-cell *matHeaderCellDef> Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.song_name }} </td>
+                            </ng-container>
+    
+                            <ng-container matColumnDef="song_author">
+                                <th mat-header-cell *matHeaderCellDef> Author </th>
+                                <td mat-cell *matCellDef="let element"> {{element.song_author }} </td>
+                            </ng-container>
+    
+                            <ng-container matColumnDef="added_by_displayName">
+                                <th mat-header-cell *matHeaderCellDef> Added by </th>
+                                <td mat-cell *matCellDef="let element"> {{element.added_by_displayName}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="added_on">
+                                <th mat-header-cell *matHeaderCellDef> Added on </th>
+                                <td mat-cell *matCellDef="let element"> {{element.added_on | date}} </td>
+                            </ng-container>
+    
+                            <ng-container matColumnDef="played">
+                                <th mat-header-cell *matHeaderCellDef> Played</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span *ngIf="element.played" style="color: green;">Played</span>
+                                    <span *ngIf="!element.played" style="color: red;">Not Played</span>
+                                </td>
+                            </ng-container>
+    
+    
+    
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+    
+    
+    
+    
+                    </ion-card-content>
+                </ion-card>
+            </div>
+    
+        </div>
+        <div *ngIf="!hasAccess" class="pv__noAccess">
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title style="color:red">You are not a member of this party yet</ion-card-title>
+                    <ion-card-subtitle>Access forbidden</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <a href="/" color="primary" style="width:100%" mat-raised-button>Go home</a>
                 </ion-card-content>
             </ion-card>
         </div>
-
+    
     </div>
-    <div *ngIf="!hasAccess" class="pv__noAccess">
-        <ion-card>
-            <ion-card-header>
-                <ion-card-title style="color:red">You are not a member of this party yet</ion-card-title>
-                <ion-card-subtitle>Access forbidden</ion-card-subtitle>
-            </ion-card-header>
-            <ion-card-content>
-                <a href="/" color="primary" style="width:100%" mat-raised-button>Go home</a>
-            </ion-card-content>
-        </ion-card>
-    </div>
-
-</div>
+</ion-content>

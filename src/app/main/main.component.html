@@ -1,11 +1,15 @@
 
 <div *ngIf="loadingS.isLoading==true" class="">
-   <ion-progress-bar mode="indeterminate"></ion-progress-bar>
+   <ion-progress-bar mode="iod" type="indeterminate"></ion-progress-bar>
 </div>
-<div class="mainapp__container">
-   
-   <ion-router-outlet></ion-router-outlet>
 
+<div class="mainapp__container">
+
+   <!-- <ion-content>
+
+   </ion-content>
+    -->
+   <ion-router-outlet></ion-router-outlet>
 </div>
 
 <ion-footer collapse="fade">
