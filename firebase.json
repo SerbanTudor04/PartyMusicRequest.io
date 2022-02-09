@@ -1,7 +1,7 @@
 {
   "hosting": {
     "target": "pmr",
-    "public": "dist/pmr",
+    "public": "www",
     "ignore": [
       "**/.*"
     ],
