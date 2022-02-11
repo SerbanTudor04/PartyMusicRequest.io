@@ -63,12 +63,6 @@ export class AuthenticateService {
 
       });
   }
-  isAuthenticated() {
-    
-    // // if (this.user$.value || this.auth.currentUser) return true;
-    // // return false;
-    return true
-  }
 
   logout() {
     return signOut(this.auth);

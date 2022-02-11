@@ -1,36 +1,37 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-
-@Injectable({
+// import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastController } from '@ionic/angular';@Injectable({
   providedIn: 'root'
 })
 export class NotificationsService {
 
   notifDuration=5000;
-  constructor(private snackbar:MatSnackBar) { }
-  sendDanger(message:string){
-    this.snackbar.open(message,'Close',{
-      duration:this.notifDuration,
-      panelClass:['notif-class-danger'],
-      horizontalPosition: "end",
-      verticalPosition: "top",
-    })
+  constructor(public toastController: ToastController) { }
+
+  async sendMessage(message:string){
+    const toast = await this.toastController.create({
+      header: 'Success',
+      message: message,
+      duration: 5000,
+      icon: 'information-circle',
+      position: 'bottom',
+    });
+    toast.present();
   }
-  sendWarning(message:string){
-    this.snackbar.open(message,'Close',{
-      duration:this.notifDuration,
-      panelClass:['notif-class-warning'],
-      horizontalPosition: "end",
-      verticalPosition: "top",
-    })
+
+
+  async sendDanger(message:string){
+    this.sendMessage(message);
+
   }
-  sendSuccess(message:string){
-    this.snackbar.open(message,'Close',{
-      duration:this.notifDuration,
-      panelClass:['notif-class-success'],
-      horizontalPosition: "end",
-      verticalPosition: "top",
-    })
+  async sendWarning(message:string){
+    this.sendMessage(message);
+
+  }
+  async sendSuccess(message:string){
+
+
+    this.sendMessage(message);
   }
 
 }
