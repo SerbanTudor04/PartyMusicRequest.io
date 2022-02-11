@@ -8,13 +8,12 @@ import { MainScreenComponent } from './main-screen.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PartyViewComponent } from './party-view.component';
-import {ClipboardModule} from '@angular/cdk/clipboard'; 
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 
-
-import {IonicModule} from '@ionic/angular'
-
+import {MatPaginatorModule} from '@angular/material/paginator'; 
+import { IonicModule } from '@ionic/angular';
 @NgModule({
   declarations: [MainComponent, MainScreenComponent, PartyViewComponent],
   imports: [
@@ -26,7 +25,8 @@ import {IonicModule} from '@ionic/angular'
     FormsModule,
     ClipboardModule,
     IonicModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [],
 })

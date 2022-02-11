@@ -1,4 +1,5 @@
-
+<ion-content>
+    
     <div class="pv__container">
         <div *ngIf="hasAccess" class="pv__hasAccess">
             <div class="pv__header pv__blocks">
@@ -104,7 +105,13 @@
                         </div>
                     </ion-card-title>
                     <ion-card-content class="songs__table__list">
-    
+                        
+                        <ion-item>
+                            <ion-label  position="floating">Search</ion-label>
+                            <ion-input #input (keyup)="applyFilter($event)"   maxlength="64" placeholder="Ex. Are you with me?"></ion-input>
+                        </ion-item>
+
+
                         <table [bgColor]="'dark'" mat-table [dataSource]="dataSource" class="mat-elevation-z0">
     
                             <ng-container matColumnDef="song_name">
@@ -139,15 +146,16 @@
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>
-    
-    
-    
+                        
+                        
+                        <mat-paginator  [pageSizeOptions]="[5]" ></mat-paginator>
     
                     </ion-card-content>
                 </ion-card>
             </div>
-    
+
         </div>
+        <span class="blank_zone"></span>
         <div *ngIf="!hasAccess" class="pv__noAccess">
             <ion-card>
                 <ion-card-header>
@@ -159,5 +167,6 @@
                 </ion-card-content>
             </ion-card>
         </div>
-    
     </div>
+
+</ion-content>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 import { ConfigService } from './services/config.service';
 import { LoadingBarService } from './services/loading-bar.service';
 
@@ -9,9 +10,16 @@ import { LoadingBarService } from './services/loading-bar.service';
 })
 export class MainComponent implements OnInit {
 
-  constructor(public loadingS:LoadingBarService,public configS:ConfigService) { }
+  constructor(public loadingS:LoadingBarService,public configS:ConfigService,private menu: MenuController) { }
 
   ngOnInit(): void {
   }
+  openFirst() {
+    this.menu.enable(true, 'first');
+    this.menu.open('first');
+  }
 
+  openEnd() {
+    this.menu.open('end');
+  }
 }

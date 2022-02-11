@@ -1,23 +1,30 @@
-
-<div *ngIf="loadingS.isLoading==true" class="">
-   <ion-progress-bar mode="iod" type="indeterminate"></ion-progress-bar>
-</div>
+<ion-menu side="start" menuId="first" contentId="main">
+   <ion-header>
+     <ion-toolbar color="default">
+       <ion-title>{{configS.application_name}}</ion-title>
+     </ion-toolbar>
+   </ion-header>
+   <ion-content>
+      <ion-list>
+         <ion-item>Coming soon</ion-item>
+      </ion-list>
+   </ion-content>
+   <ion-footer>
+      <ion-toolbar color="default">
+         <ion-buttons slot="primary">
+            <ion-button target="blank" href="https://github.com/SerbanTudor04/PartyMusicRequest.io">
+              Github <img width="32" height="32 " src="../../assets/github.png" alt="">
+            </ion-button>
+          </ion-buttons>
+       </ion-toolbar>
+   </ion-footer>
+ </ion-menu>
+ 
 
 <div class="mainapp__container">
-
-   <!-- <ion-content>
-
-   </ion-content>
-    -->
-   <ion-router-outlet></ion-router-outlet>
+   <div *ngIf="loadingS.isLoading == true" class="">
+      <ion-progress-bar mode="iod" type="indeterminate"></ion-progress-bar>
+   </div>
+    
+  <ion-router-outlet id="main"></ion-router-outlet>
 </div>
-
-<ion-footer collapse="fade">
-   <ion-toolbar class="display_flex">
-      <ion-buttons slot="primary">
-         <ion-button target="blank" href="https://github.com/SerbanTudor04/PartyMusicRequest.io">
-           Github <img width="32" height="32 " src="../../assets/github.png" alt="">
-         </ion-button>
-       </ion-buttons>
-   </ion-toolbar>
- </ion-footer>
