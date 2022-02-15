@@ -1,6 +1,6 @@
 {
   "name": "pmr",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": "SerbanTudorGabriel",
   "scripts": {
     "ng": "ng",

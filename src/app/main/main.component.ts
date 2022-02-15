@@ -15,6 +15,8 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
   }
   openFirst() {
+    console.log("Menu opened");
+    
     this.menu.enable(true, 'first');
     this.menu.open('first');
   }
