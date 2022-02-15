@@ -12,6 +12,7 @@ import {
   doc,
   setDoc,
   getDoc,
+  updateDoc
 } from 'firebase/firestore';
 
 import { NotificationsService } from './notifications.service';
@@ -85,7 +86,7 @@ export class PartyService {
       ],
     };
 
-    const response_doc: any = await addDoc(coll, data)
+   await addDoc(coll, data)
       .then((res) => this.makeRedirect2Party(data.created_by, res.id))
       .catch((error) => {
         console.log(error);
@@ -182,7 +183,25 @@ export class PartyService {
       return {name:name,description:description};
   }
 
+  async updateSongs(partyID: string,songs:any[]){
+    let q_doc = doc(this.afs, `partys/${partyID}`);
+    // let ret_data: any = (await getDoc(q_doc)).data();
+    updateDoc(q_doc,{"songs":songs}).then(
+      (response)=>{
+        console.log(response);
+        
+      }
+    ).catch(
+      (error)=>{
+        console.error(error);
+        
+      }
+    )
 
+    
+
+
+  }
 
   // aux functions
 

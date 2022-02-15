@@ -29,7 +29,8 @@
                             <!-- add song buttons -->
                             <div class="pv__top__menu__btns">
                                 <!-- add a song -->
-                                <ion-button class="btn-margin-left" shape="round" *ngIf="!add_song"
+                                <ion-buttons>
+                                    <ion-button class="btn-margin-left" shape="round" *ngIf="!add_song"
                                     (click)="add_song=true;edit_poarty=false" color="primary">
                                     <mat-icon>add</mat-icon>
                                 </ion-button>
@@ -54,6 +55,7 @@
                                     [cdkCopyToClipboard]="party_data.data.join_code">
                                     <mat-icon>qr_code_scanner</mat-icon>
                                 </ion-button>
+                                </ion-buttons>
 
                             </div>
                             <div *ngIf="add_song" class="pv__add_song pv__blocks">
@@ -80,11 +82,8 @@
 
                                 </ion-card>
                             </div>
-                            <div *ngIf="edit_poarty && is_owner" class="pv__add_song pv__blocks">
+                            <div style="overflow: hidden;" *ngIf="edit_poarty && is_owner" class="pv__add_song pv__blocks">
                                 <ion-card class="mat-elevation-z0">
-                                    <ion-card-header>
-                                        <ion-card-title>Party Informations</ion-card-title>
-                                    </ion-card-header>
                                     <ion-card-content>
                                         <div class="form-submit-class">
                                             <ion-item>
@@ -125,43 +124,82 @@
                         </ion-item>
 
 
-                        <table [bgColor]="'dark'" mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+                        <table matSort [bgColor]="'dark'" mat-table [dataSource]="dataSource" class="mat-elevation-z0" multiTemplateDataRows>
 
                             <ng-container matColumnDef="song_name">
-                                <th mat-header-cell *matHeaderCellDef> Name </th>
+                                <th mat-sort-header mat-header-cell *matHeaderCellDef> Name </th>
                                 <td mat-cell *matCellDef="let element"> {{element.song_name }} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="song_author">
-                                <th mat-header-cell *matHeaderCellDef> Author </th>
+                                <th mat-sort-header mat-header-cell *matHeaderCellDef> Author </th>
                                 <td mat-cell *matCellDef="let element"> {{element.song_author }} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="added_by_displayName">
-                                <th mat-header-cell *matHeaderCellDef> Added by </th>
+                                <th mat-sort-header mat-header-cell *matHeaderCellDef> Added by </th>
                                 <td mat-cell *matCellDef="let element"> {{element.added_by_displayName}} </td>
                             </ng-container>
                             <ng-container matColumnDef="added_on">
-                                <th mat-header-cell *matHeaderCellDef> Added on </th>
+                                <th mat-sort-header mat-header-cell *matHeaderCellDef> Added on </th>
                                 <td mat-cell *matCellDef="let element"> {{element.added_on | date}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="played">
-                                <th mat-header-cell *matHeaderCellDef> Played</th>
+                                <th mat-sort-header mat-header-cell *matHeaderCellDef> Played</th>
                                 <td mat-cell *matCellDef="let element">
                                     <span *ngIf="element.played" style="color: green;">Played</span>
                                     <span *ngIf="!element.played" style="color: red;">Not Played</span>
                                 </td>
                             </ng-container>
-
-
+                            
+                            
+                            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                            <ng-container matColumnDef="expandedDetail">
+                                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                                  <div class="element-detail"
+                                       [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                                    <div class="element-inputs" *ngIf="is_owner">
+                                        <ion-button (click)="markASongAsPlayed(element)" expand="block">Mark as played</ion-button>
+                                    </div>
+                
+                                  </div>
+                                </td>
+                              </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <div >
+                                <tr  mat-row *matRowDef="let element; columns: displayedColumns;"
+                           
+                                class="example-element-row"
+                                [class.example-expanded-row]="expandedElement === element"
+                                (click)="expandedElement = expandedElement === element ? null : element">
+                            </tr>
+                            </div>
+                           
+                            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
                         </table>
 
 
-                        <mat-paginator [pageSizeOptions]="[5]"></mat-paginator>
+                        <mat-paginator [pageSizeOptions]="[5]"></mat-paginator> 
+
+                        <div style="display: flex; flex: 1 auto 1;width: 100%;padding-top: 0.5rem;" *ngIf="songs_edited.length && is_owner">
+                            <ion-button expand="full" color="primary"
+                            (click)="saveSongsPlayed()"
+                            >
+                                Save <mat-icon>save</mat-icon>
+                            </ion-button>
+                            <ion-button (click)="songs_edited=[];" expand="full" color="danger">
+                                Cancel <mat-icon>cancel</mat-icon>
+                            </ion-button>
+                            <ion-text class="current__edited__songs" color="default">
+                                <h1>
+                                {{songs_edited.length}}
+                                </h1>
+                            </ion-text>
+
+                        </div>
+   
 
                     </ion-card-content>
                 </ion-card>

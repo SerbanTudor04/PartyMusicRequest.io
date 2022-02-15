@@ -7,11 +7,19 @@ import { Auth } from '@angular/fire/auth';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-
+import { SongsModel } from '../shared/party';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 @Component({
   selector: 'app-party-view',
   templateUrl: './party-view.component.html',
   styleUrls: ['./party-view.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class PartyViewComponent implements OnInit {
   hasAccess = false;
@@ -19,6 +27,13 @@ export class PartyViewComponent implements OnInit {
     songs: [],
   };
   partyid_code: string;
+
+  expandedElement:SongsModel|null=null;
+
+  songs_edited:any[]=[]
+  song_modifications:boolean=false;
+
+
 
   add_song: boolean = false;
   edit_poarty: boolean = false;
@@ -129,7 +144,31 @@ export class PartyViewComponent implements OnInit {
   }
 
 
+  markASongAsPlayed(element:any){  
+    if(this.songs_edited.indexOf(element)==-1)
+      this.songs_edited.push(element)
 
+  }
+
+
+
+  saveSongsPlayed(){
+    if(this.songs_edited.length<=0)
+      return;
+
+    for(let i in this.songs_edited){
+      
+      let el=this.songs_edited[i]
+      let index_of=this.party_data.data.songs.indexOf(el)
+      el.played=true;
+      this.party_data.data.songs[index_of]=el
+      
+    }
+    this.songs_edited=[]
+
+    this.partyS.updateSongs(this.partyid_code,this.party_data.data.songs);
+    
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

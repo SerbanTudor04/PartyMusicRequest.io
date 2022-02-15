@@ -1,5 +1,5 @@
 @import "../shared/classes.style.scss";
-
+@import "../../themes/variables.scss";
 
 .pv__container{
     position: absolute;
@@ -23,10 +23,48 @@
     table{
         width: 100%;
     }
+    tr.detail-row {
+        height: 0;
+      }
+      
+      tr.element-row:not(.expanded-row):hover {
+        background: transparent;
+        // color: ;
+      }
+      
+      tr.element-row:not(.expanded-row):active {
+        background: red;
+      }
+      
+      .element-row td {
+        border-bottom-width: 0;
+      }
+      
+      .element-detail {
+        overflow: hidden;
+        display: flex;
+      }
+      .element-inputs{
+          width: 100%;
+          padding-top: 1rem;
+          padding-bottom: 1rem;
+      }
 }
 .blank_zone{
     // height: 100%;
     width: 100%;
     padding-top: 1rem;
     margin-top: 1rem;
+}
+
+.current__edited__songs{
+    position: absolute;
+    bottom: 3%;
+    right: 2%;
+    // transform: translate(10%,10%);
+    // padding-left: 1rem;
+}
+.pv__top__menu__btns{
+    padding-top: 1rem;
+    overflow: hidden;
 }
