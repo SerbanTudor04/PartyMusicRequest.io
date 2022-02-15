@@ -22,4 +22,5 @@ export interface PartyModel{
     created_by_displayName?:string;
     members?:PartyMembersModel[];
     songs?:SongsModel[];
+    open?:Boolean;
 }

@@ -75,6 +75,7 @@ export class PartyService {
       created_by: this.aauth.currentUser?.uid ?? '',
       created_on: this.getCurrentDateTime(),
       created_by_displayName: this.aauth.currentUser?.displayName ?? '',
+      open:true,
       members: [
         {
           uid: this.aauth.currentUser?.uid ?? '',
@@ -108,7 +109,9 @@ export class PartyService {
       data: {},
       doc_uid: '',
     };
-
+    
+    if(data.created_by!=this.aauth.currentUser?.uid && !data.open)
+      retVal.hasAccess=false;
     if (!retVal.hasAccess) {
       return retVal;
     }
@@ -153,11 +156,12 @@ export class PartyService {
       });
     return song_info;
   }
-  async updatePartyInfo(partyID:string,name:string,description:string){
+  async updatePartyInfo(partyID:string,name:string,description:string,opened:boolean){
     let q_doc = doc(this.afs, `partys/${partyID}`);
     let ret_data: any = (await getDoc(q_doc)).data();
     ret_data.name=name
     ret_data.description=description
+    ret_data.open=opened
 
 
     await setDoc(q_doc, ret_data)
@@ -218,11 +222,6 @@ export class PartyService {
   }
 
   private makeRedirect2Party(created_by_uid: string, partyID: string) {
-    // redirects to Party View or Party View Creator
-
-    // if(this.aauth.currentUser?.uid == created_by_uid)
-    //   this.router.navigate(['pvc',partyID])
-    // else
       this.router.navigate(['pv',partyID])
 
 
