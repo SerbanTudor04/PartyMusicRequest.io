@@ -67,16 +67,16 @@
                                             <ion-list>
                                                 <ion-title>Copy to</ion-title>
                                                 <ion-button shape="" expand="block" class="" color="default"
-                                                (click)="notifS.sendSuccess('Join code has been copied in clipboard!');"
-                                                [cdkCopyToClipboard]="party_data.data.join_code">
-                                                Clipboard
+                                                (click)="get_join_code(party_data.data.join_code)"
+                                                >
+                                                Join code
 
                                             </ion-button>
 
                                             <ion-button style="width: 100%;" shape="" expand="block" class=""
                                                 color="default"
-                                                (click)="notifS.sendSuccess('Share Link has been copied in clipboard!');"
-                                                [cdkCopyToClipboard]="get_share_link(party_data.data.join_code)">
+                                                (click)="get_share_link(party_data.data.join_code)"
+                                                >
                                                 Share Link
 
                                             </ion-button>
