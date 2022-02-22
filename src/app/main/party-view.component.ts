@@ -206,4 +206,9 @@ export class PartyViewComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  get_share_link(join_code:string){
+    return `${window.location.protocol}//${window.location.hostname}/join/${join_code}`
+  }
+
 }

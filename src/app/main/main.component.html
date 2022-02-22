@@ -6,8 +6,8 @@
    </ion-header>
    <ion-content >
       <ion-list>
-         <ion-item>Home</ion-item>
-         <ion-item>Party Join</ion-item>
+         <ion-item href="/">Home</ion-item>
+         <ion-item href="/join">Party Join</ion-item>
          <ion-item>Coming soon</ion-item>
          <ion-item>Coming soon</ion-item>
          <ion-item>Coming soon</ion-item>
@@ -28,7 +28,5 @@
    <div *ngIf="loadingS.isLoading == true" class="">
       <ion-progress-bar mode="md" type="indeterminate"></ion-progress-bar>
    </div>
-      <ion-router-outlet  id="main" ></ion-router-outlet>
-
-   
+      <ion-router-outlet  id="main" ></ion-router-outlet>   
 </div>

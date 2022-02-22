@@ -1,15 +1,12 @@
 <ion-content>
     <app-open-side-nav></app-open-side-nav>
-    
+
 
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content
-          pullingIcon="arrow-down-circle-sharp"
-          pullingText="Pull to refresh"
-          refreshingSpinner="circles"
-          refreshingText="Refreshing...">
+        <ion-refresher-content pullingIcon="arrow-down-circle-sharp" pullingText="Pull to refresh"
+            refreshingSpinner="circles" refreshingText="Refreshing...">
         </ion-refresher-content>
-      </ion-refresher>
+    </ion-refresher>
 
     <div class="pv__container">
         <div *ngIf="hasAccess" class="pv__hasAccess">
@@ -62,10 +59,30 @@
 
                                     <!-- get join code -->
                                     <ion-button shape="round" class="btn-margin-left" color="default"
-                                        (click)="notifS.sendSuccess('Join code has been copied in clipboard!');"
-                                        [cdkCopyToClipboard]="party_data.data.join_code">
+                                        id="open-share-menu">
                                         <mat-icon>qr_code_scanner</mat-icon>
                                     </ion-button>
+                                    <ion-popover trigger="open-share-menu">
+                                        <ng-template>
+                                            <ion-list>
+                                                <ion-title>Copy to</ion-title>
+                                                <ion-button shape="" expand="block" class="" color="default"
+                                                (click)="notifS.sendSuccess('Join code has been copied in clipboard!');"
+                                                [cdkCopyToClipboard]="party_data.data.join_code">
+                                                Clipboard
+
+                                            </ion-button>
+
+                                            <ion-button style="width: 100%;" shape="" expand="block" class=""
+                                                color="default"
+                                                (click)="notifS.sendSuccess('Share Link has been copied in clipboard!');"
+                                                [cdkCopyToClipboard]="get_share_link(party_data.data.join_code)">
+                                                Share Link
+
+                                            </ion-button>
+                                            </ion-list>
+                                        </ng-template>
+                                    </ion-popover>
                                 </ion-buttons>
 
                             </div>
