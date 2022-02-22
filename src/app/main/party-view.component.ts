@@ -9,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SongsModel } from '../shared/party';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { async } from '@firebase/util';
 @Component({
   selector: 'app-party-view',
   templateUrl: './party-view.component.html',
@@ -40,6 +41,9 @@ export class PartyViewComponent implements OnInit {
   is_owner: boolean = false;
 
   can_update_info: boolean = true;
+
+
+  is_allowed_refresh:boolean= true;
 
   song_add_data = {
     song_name: '',
@@ -80,6 +84,30 @@ export class PartyViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.initPage();
+  }
+
+  doRefresh(event:any){
+    console.log(this.is_allowed_refresh);
+    
+    if(!this.is_allowed_refresh){
+      this.notifS.sendWarning("You need to wait, in order to refresh again!")
+      event.target.complete();
+      
+      return
+    }
+    this.is_allowed_refresh=false;
+    
+    this.initPage().then(
+      ()=>{
+        this.notifS.sendSuccess("Refresh has been made with success!")
+       
+     
+        event.target.complete();
+        setTimeout(()=>{
+          this.is_allowed_refresh=true;
+        },6000)
+      }
+    )
   }
 
   async initPage() {

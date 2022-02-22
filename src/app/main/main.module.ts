@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MainRoutingModule } from './main-routing.module';
 import { MainComponent } from './main.component';
 import { MatIconModule } from '@angular/material/icon';
-import { MainScreenComponent } from './main-screen.component';
+import { JoinPartyScreenComponent } from './joinparty-screen.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PartyViewComponent } from './party-view.component';
@@ -14,8 +14,12 @@ import { MatTableModule } from '@angular/material/table';
 
 import {MatPaginatorModule} from '@angular/material/paginator'; 
 import { IonicModule } from '@ionic/angular';
+import { OpenSideNavComponent } from './open-side-nav/open-side-nav.component';
+import { HomePageComponent } from './home-page.component';
+import { PartyViewWithoutCodeComponent } from './party-view-without-code.component';
+import { JoinWithLinkComponent } from './join-with-link.component';
 @NgModule({
-  declarations: [MainComponent, MainScreenComponent, PartyViewComponent],
+  declarations: [MainComponent, JoinPartyScreenComponent, PartyViewComponent, OpenSideNavComponent, HomePageComponent, PartyViewWithoutCodeComponent, JoinWithLinkComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

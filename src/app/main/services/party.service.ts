@@ -33,7 +33,7 @@ export class PartyService {
 
     if (q_data.empty) {
       this.notif.sendDanger('The entered code is invalid!');
-      return;
+      return false;
     }
 
     // get the desired document
@@ -62,7 +62,7 @@ export class PartyService {
 
     // this.router.navigate(['pv', docID]);
     this.makeRedirect2Party(data.created_by,docID)
-
+    return true
   }
 
   async createParty(name: string, description: string, end_date: string) {

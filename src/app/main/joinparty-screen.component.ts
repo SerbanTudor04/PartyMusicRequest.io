@@ -19,9 +19,9 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-main-screen',
-  templateUrl: './main-screen.component.html',
-  styleUrls: ['./main-screen.component.scss'],
+  selector: 'app-joinparty-screen',
+  templateUrl: './joinparty-screen.component.html',
+  styleUrls: ['./joinparty-screen.component.scss'],
   providers: [
     {
       provide: DateAdapter,
@@ -33,7 +33,7 @@ export const MY_FORMATS = {
   ],
   
 })
-export class MainScreenComponent implements OnInit {
+export class JoinPartyScreenComponent implements OnInit {
 
   join_party:boolean=false;
   create_party:boolean=false;
@@ -46,7 +46,6 @@ export class MainScreenComponent implements OnInit {
     end_date:"",
     description:""
   }
-  // date = new FormControl(moment());
 
   constructor(private partyS:PartyService,private loadingS:LoadingBarService) { }
 
