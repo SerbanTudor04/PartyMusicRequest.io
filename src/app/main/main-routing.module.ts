@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AboutPageComponent } from './about-page.component';
 import { HomePageComponent } from './home-page.component';
 import { JoinWithLinkComponent } from './join-with-link.component';
 import { JoinPartyScreenComponent } from './joinparty-screen.component';
@@ -11,6 +12,7 @@ import { PartyViewComponent } from './party-view.component';
 const routes: Routes = [
   { path: '', component: MainComponent,children:[
     {path:"home",component:HomePageComponent},
+    {path:"about",component:AboutPageComponent},
     {path:"join/:joinCode",component:JoinWithLinkComponent},
     {path:"join",component:JoinPartyScreenComponent},
     {path:"pv/:partyID",component:PartyViewComponent},

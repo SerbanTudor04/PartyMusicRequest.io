@@ -18,8 +18,9 @@ import { OpenSideNavComponent } from './open-side-nav/open-side-nav.component';
 import { HomePageComponent } from './home-page.component';
 import { PartyViewWithoutCodeComponent } from './party-view-without-code.component';
 import { JoinWithLinkComponent } from './join-with-link.component';
+import { AboutPageComponent } from './about-page.component';
 @NgModule({
-  declarations: [MainComponent, JoinPartyScreenComponent, PartyViewComponent, OpenSideNavComponent, HomePageComponent, PartyViewWithoutCodeComponent, JoinWithLinkComponent],
+  declarations: [MainComponent, JoinPartyScreenComponent, PartyViewComponent, OpenSideNavComponent, HomePageComponent, PartyViewWithoutCodeComponent, JoinWithLinkComponent, AboutPageComponent],
   imports: [
     CommonModule,
     MainRoutingModule,

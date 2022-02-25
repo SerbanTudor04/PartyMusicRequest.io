@@ -1,3 +1,5 @@
+
+
 <ion-menu class="" side="start" menuId="first" contentId="main">
    <ion-header>
      <ion-toolbar color="default">
@@ -7,8 +9,8 @@
    <ion-content >
       <ion-list>
          <ion-item href="/">Home</ion-item>
-         <ion-item href="/join">Party Join</ion-item>
-         <ion-item>Coming soon</ion-item>
+         <ion-item href="/join">Join Party</ion-item>
+         <ion-item href="/about">About us</ion-item>
          <ion-item>Coming soon</ion-item>
          <ion-item>Coming soon</ion-item>
       </ion-list>
@@ -26,6 +28,8 @@
 
 <div class="noselect mainapp__container">
    <div *ngIf="loadingS.isLoading == true" class="">
+   <ion-backdrop visible="showBackdrop"></ion-backdrop>
+
       <ion-progress-bar mode="md" type="indeterminate"></ion-progress-bar>
    </div>
       <ion-router-outlet  id="main" ></ion-router-outlet>   
