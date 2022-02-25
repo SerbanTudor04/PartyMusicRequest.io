@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pmr": {
+    "app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "pmr:build:production"
+              "browserTarget": "app:build:production"
             },
             "development": {
-              "browserTarget": "pmr:build:development"
+              "browserTarget": "app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pmr:build"
+            "browserTarget": "app:build"
           }
         },
         "test": {
@@ -109,7 +109,7 @@
           "options": {
             "prerender": false,
             "ssr": false,
-            "browserTarget": "pmr:build:production",
+            "browserTarget": "app:build:production",
             "firebaseProject": "partymusicrequest",
             "firebaseHostingSite": "partymusicrequest"
           }
@@ -117,5 +117,5 @@
       }
     }
   },
-  "defaultProject": "pmr"
+  "defaultProject": "app"
 }
