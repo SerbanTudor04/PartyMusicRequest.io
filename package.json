@@ -9,7 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "deploy": "ng build && ng deploy",
-    "app:build":"ng build"
+    "ionic_build_and_deploy":"ionic build --prod && ng deploy"
   },
   "sideEffects": false,
   "private": true,
