@@ -1,0 +1,30 @@
+@import "../shared/classes.style.scss";
+
+.ab__container{
+    position: relative;
+    left: 20%;
+    top: 20%;
+    .title{
+        text-transform: uppercase;
+        // text-align: left;
+        font-size: 4rem;
+        
+    }   
+    .ab__content{
+        position: relative;
+        width: 60%;
+        padding-bottom: 1rem;
+    }
+    @media screen and( max-width:1000px) {
+        left: 5%;
+        .title{
+            position: relative;
+            font-size: 3rem;
+            left:0;
+
+        }
+        .ab__content{
+            width: 90%;
+        }
+    }
+}

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "app": {
+    "pmr": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -58,10 +58,10 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": true,
-              "optimization": true,
+              "buildOptimizer": false,
+              "optimization": false,
               "vendorChunk": true,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
             }
@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "app:build:production"
+              "browserTarget": "pmr:build:production"
             },
             "development": {
-              "browserTarget": "app:build:development"
+              "browserTarget": "pmr:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "app:build"
+            "browserTarget": "pmr:build"
           }
         },
         "test": {
@@ -109,7 +109,7 @@
           "options": {
             "prerender": false,
             "ssr": false,
-            "browserTarget": "app:build:production",
+            "browserTarget": "pmr:build:production",
             "firebaseProject": "partymusicrequest",
             "firebaseHostingSite": "partymusicrequest"
           }
@@ -117,5 +117,5 @@
       }
     }
   },
-  "defaultProject": "app"
+  "defaultProject": "pmr"
 }
