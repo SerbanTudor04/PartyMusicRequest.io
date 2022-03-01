@@ -8,6 +8,7 @@ import { MainComponent } from './main.component';
 import { PartyViewWithoutCodeComponent } from './party-view-without-code.component';
 
 import { PartyViewComponent } from './party-view.component';
+import { ViewQRCodeComponent } from './view-qrcode/view-qrcode.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent,children:[
@@ -17,6 +18,7 @@ const routes: Routes = [
     {path:"join",component:JoinPartyScreenComponent},
     {path:"pv/:partyID",component:PartyViewComponent},
     {path:"pv",component:PartyViewWithoutCodeComponent},
+    {path:'view-qr',component:ViewQRCodeComponent},
     {path:"",redirectTo:"home",pathMatch:"full"}
 
   ] }

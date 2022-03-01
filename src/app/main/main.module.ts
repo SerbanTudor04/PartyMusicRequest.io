@@ -19,10 +19,12 @@ import { HomePageComponent } from './home-page.component';
 import { PartyViewWithoutCodeComponent } from './party-view-without-code.component';
 import { JoinWithLinkComponent } from './join-with-link.component';
 import { AboutPageComponent } from './about-page.component';
+import { QRCodeModule } from 'angular2-qrcode';
 
-import {MatSortModule} from '@angular/material/sort'; 
+import {MatSortModule} from '@angular/material/sort';
+import { ViewQRCodeComponent } from './view-qrcode/view-qrcode.component'; 
 @NgModule({
-  declarations: [MainComponent, JoinPartyScreenComponent, PartyViewComponent, OpenSideNavComponent, HomePageComponent, PartyViewWithoutCodeComponent, JoinWithLinkComponent, AboutPageComponent],
+  declarations: [MainComponent, JoinPartyScreenComponent, PartyViewComponent, OpenSideNavComponent, HomePageComponent, PartyViewWithoutCodeComponent, JoinWithLinkComponent, AboutPageComponent, ViewQRCodeComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -34,7 +36,8 @@ import {MatSortModule} from '@angular/material/sort';
     IonicModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    QRCodeModule
   ],
   providers: [],
 })

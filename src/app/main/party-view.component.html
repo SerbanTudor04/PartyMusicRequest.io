@@ -67,7 +67,7 @@
                                             <ion-list>
                                                 <ion-title>Copy to</ion-title>
                                                 <ion-button shape="" expand="block" class="" color="default"
-                                                (click)="get_join_code(party_data.data.join_code)"
+                                                (click)="copy2Clipboard(party_data.data.join_code)"
                                                 >
                                                 Join code
 
@@ -75,9 +75,18 @@
 
                                             <ion-button style="width: 100%;" shape="" expand="block" class=""
                                                 color="default"
-                                                (click)="get_share_link(party_data.data.join_code)"
+                                                (click)="copy2Clipboard(get_share_link(party_data.data.join_code))"
                                                 >
                                                 Share Link
+
+                                            </ion-button>
+                      
+                                            <ion-button style="width: 100%;" shape="" expand="block" class=""
+                                                color="default"
+                                                target="blank"
+                                                href="/view-qr?url={{get_share_link(party_data.data.join_code)}}"
+                                                >
+                                                View QRCode
 
                                             </ion-button>
                                             </ion-list>

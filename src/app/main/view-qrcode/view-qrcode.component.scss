@@ -1,0 +1,26 @@
+
+    .__title{
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+        transform: translate(-50%,0%);
+        font-size: 3rem;
+    }
+
+.qr__position{
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%,0%);
+
+}
+@media screen and (max-width:1000px) {
+    .__title{
+        font-size: 3rem;
+    }
+    .qr__position{
+        // left: 0%;
+        width: 100%;
+    }
+
+}

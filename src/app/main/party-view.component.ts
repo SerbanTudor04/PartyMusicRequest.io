@@ -216,11 +216,9 @@ export class PartyViewComponent implements OnInit {
   }
 
   get_share_link(join_code:string){
-    this.copy2Clipboard( `${window.location.protocol}//${window.location.hostname}/join/${join_code}`)
+    return `${window.location.protocol}//${window.location.hostname}/join/${join_code}`
   }
-  get_join_code(code:string){
-    this.copy2Clipboard( `${code}`)
-  }
+
   copy2Clipboard(data:string){
     const listener = (e: ClipboardEvent) => {
       e.clipboardData!.setData('text/plain', data);
