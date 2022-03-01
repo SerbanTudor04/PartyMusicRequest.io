@@ -12,7 +12,7 @@ import {
   doc,
   setDoc,
   getDoc,
-  updateDoc
+  updateDoc,
 } from 'firebase/firestore';
 
 import { NotificationsService } from './notifications.service';
@@ -45,11 +45,7 @@ export class PartyService {
     let isInParty = this.checkIfUserIsInParty(data);
 
     if (!isInParty) {
-      data.members.push({
-        uid: String(this.aauth.currentUser?.uid),
-        joined_on: String(this.getCurrentDateTime()),
-        displayName: String(this.aauth.currentUser?.displayName),
-      });
+      data.members.push(String(this.aauth.currentUser?.uid));
 
       await setDoc(q_doc, data);
       this.notif.sendSuccess(
@@ -61,8 +57,8 @@ export class PartyService {
       );
 
     // this.router.navigate(['pv', docID]);
-    this.makeRedirect2Party(data.created_by,docID)
-    return true
+    this.makeRedirect2Party(data.created_by, docID);
+    return true;
   }
 
   async createParty(name: string, description: string, end_date: string) {
@@ -76,18 +72,15 @@ export class PartyService {
       created_by: this.aauth.currentUser?.uid ?? '',
       created_on: this.getCurrentDateTime(),
       created_by_displayName: this.aauth.currentUser?.displayName ?? '',
-      open:true,
-      members: [
-        {
-          uid: this.aauth.currentUser?.uid ?? '',
-          joined_on: this.getCurrentDateTime(),
-          displayName: this.aauth.currentUser?.displayName ?? '',
-        },
-      ],
+      open: true,
+      members: [this.aauth.currentUser?.uid]
+      
     };
 
-   await addDoc(coll, data)
-      .then((res) => this.makeRedirect2Party(data.created_by, res.id))
+    await addDoc(coll, data)
+      .then((res) => {
+        this.makeRedirect2Party(data.created_by, res.id);
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -110,9 +103,9 @@ export class PartyService {
       data: {},
       doc_uid: '',
     };
-    
-    if(data.created_by!=this.aauth.currentUser?.uid && !data.open)
-      retVal.hasAccess=false;
+
+    if (data.created_by != this.aauth.currentUser?.uid && !data.open)
+      retVal.hasAccess = false;
     if (!retVal.hasAccess) {
       return retVal;
     }
@@ -135,9 +128,8 @@ export class PartyService {
       song_author: song_author,
       song_name: song_name,
     };
-    if(ret_data.songs==undefined)
-      ret_data.songs=[]
-    
+    if (ret_data.songs == undefined) ret_data.songs = [];
+
     ret_data.songs.push(song_info);
 
     await setDoc(q_doc, ret_data)
@@ -157,50 +149,63 @@ export class PartyService {
       });
     return song_info;
   }
-  async updatePartyInfo(partyID:string,name:string,description:string,opened:boolean){
+  async updatePartyInfo(
+    partyID: string,
+    name: string,
+    description: string,
+    opened: boolean
+  ) {
     let q_doc = doc(this.afs, `partys/${partyID}`);
     let ret_data: any = (await getDoc(q_doc)).data();
-    ret_data.name=name
-    ret_data.description=description
-    ret_data.open=opened
-
+    ret_data.name = name;
+    ret_data.description = description;
+    ret_data.open = opened;
 
     await setDoc(q_doc, ret_data)
-        .then(() => {
-          this.notif.sendSuccess(
-            `Party name was updated to ${name} and description to ${description},with success!`
-          );
-          
-        })
-        .catch((error) => {
-          console.log(error);
-          
+      .then(() => {
+        this.notif.sendSuccess(
+          `Party name was updated to ${name} and description to ${description},with success!`
+        );
+      })
+      .catch((error) => {
+        console.log(error);
 
-          this.notif.sendDanger(
-            `An unexpected error has occured while trying to update the party!`
-          );
-        });
-      return {name:name,description:description};
+        this.notif.sendDanger(
+          `An unexpected error has occured while trying to update the party!`
+        );
+      });
+    return { name: name, description: description };
   }
 
-  async updateSongs(partyID: string,songs:any[]){
+  async updateSongs(partyID: string, songs: any[]) {
     let q_doc = doc(this.afs, `partys/${partyID}`);
     // let ret_data: any = (await getDoc(q_doc)).data();
-    updateDoc(q_doc,{"songs":songs}).then(
-      (response)=>{
+    updateDoc(q_doc, { songs: songs })
+      .then((response) => {
         console.log(response);
-        
-      }
-    ).catch(
-      (error)=>{
+      })
+      .catch((error) => {
         console.error(error);
-        
-      }
-    )
+      });
+  }
 
-    
+  async getCurrentJoinedPartys() {
+    const col = collection(this.afs, 'partys');
+    const q_docs = query(
+      col,
+      where('open', '==', true),
+      where('members', 'array-contains', this.aauth.currentUser?.uid)
+    );
 
+    const q_data = await (await getDocs(q_docs)).docs;
+    let retVal:any[]=[]
+    for (let index in q_data) {
 
+      retVal.push(q_data[index].data()); 
+      retVal[index].party_id=q_data[index].id
+    }
+  
+    return retVal;
   }
 
   // aux functions
@@ -233,7 +238,7 @@ export class PartyService {
   private checkIfUserIsInParty(data: any): boolean {
     let isInParty = false;
     for (let i in data.members) {
-      if (data.members[i].uid == this.aauth.currentUser?.uid) {
+      if (data.members[i] == this.aauth.currentUser?.uid) {
         isInParty = true;
       }
     }
@@ -241,9 +246,6 @@ export class PartyService {
   }
 
   private makeRedirect2Party(created_by_uid: string, partyID: string) {
-      this.router.navigate(['pv',partyID])
-
-
-
+    this.router.navigate(['pv', partyID]);
   }
 }

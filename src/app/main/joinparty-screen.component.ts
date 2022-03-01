@@ -6,6 +6,7 @@ import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/mater
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import { LoadingBarService } from './services/loading-bar.service';
+import { Auth } from '@angular/fire/auth';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -47,10 +48,31 @@ export class JoinPartyScreenComponent implements OnInit {
     description:""
   }
 
-  constructor(private partyS:PartyService,private loadingS:LoadingBarService) { }
+
+  current_joined_partys:any[]=[]
+
+  has_found_partys:boolean=true
+
+  constructor(private partyS:PartyService,private loadingS:LoadingBarService,public auth:Auth) { }
 
   ngOnInit(): void {
+    this.initPage()
   }
+
+  async initPage(){
+    
+    this.current_joined_partys= await this.partyS.getCurrentJoinedPartys()
+    console.log(this.current_joined_partys);
+    
+    if(this.current_joined_partys.length==0){
+      this.has_found_partys=false
+    }
+
+
+
+
+  }
+
 
   joinParty(){
     if(this.party_code.length==0)return;

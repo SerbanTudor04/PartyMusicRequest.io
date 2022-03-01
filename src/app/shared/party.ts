@@ -20,7 +20,7 @@ export interface PartyModel{
     created_by:string;
     created_on?:string;
     created_by_displayName?:string;
-    members?:PartyMembersModel[];
+    members?:any[];
     songs?:SongsModel[];
     open?:Boolean;
 }

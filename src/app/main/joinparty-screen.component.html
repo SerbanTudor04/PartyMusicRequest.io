@@ -2,16 +2,86 @@
     <app-open-side-nav></app-open-side-nav>
 
     <div class="main__screen__container">
+
+
         <ion-card type="ios" class="main__screen__card">
+
             <div *ngIf="!join_party && !create_party ">
+                <ion-card-header>
+                    <ion-card-title *ngIf="has_found_partys">Already joined partys:</ion-card-title>
+                    <ion-card-title *ngIf="current_joined_partys.length==0 && !has_found_partys">You are not member of an active party yet.</ion-card-title>
+                    <ion-card-subtitle *ngIf="current_joined_partys.length==0 && has_found_partys">
+                        Searching...
+                    </ion-card-subtitle>
+                </ion-card-header>
                 <ion-card-content>
+                    <div class="main__screen__alreadyPartys">
+                        <ion-grid *ngIf="current_joined_partys.length>0 && has_found_partys">
+                            <ion-row>
+                                <ion-col>
+                                    <ion-item>
+                                        Name:
+                                    </ion-item>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-item>
+                                        Created by:
+                                    </ion-item>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-item>
+                                        Ends on:
+                                    </ion-item>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-item></ion-item>
+                                </ion-col>
+                            </ion-row>
+                            <ion-row *ngFor="let item of current_joined_partys">
+                                <ion-col>                                    
+                                    <ion-text>
+                                        {{item.name}}
+
+                                    </ion-text>
+                                </ion-col>
+                                <!-- ownership cols -->
+                                <ion-col *ngIf="item.created_by==auth.currentUser?.uid">                                    
+                                    You
+                                </ion-col>
+                                <ion-col *ngIf="item.created_by!=auth.currentUser?.uid">                                    
+                                    {{item.created_by_displayName}}
+                                </ion-col>
+                                <!-- end  -->
+
+                                <ion-col >                                    
+                                    {{item.end_date | date}}
+                                </ion-col>
+                                <ion-col >                                    
+                                    <ion-button href="/pv/{{item.party_id}}" size="small" shape="round" color="secondary" >
+                                        Join <mat-icon>transit_enterexit</mat-icon>
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
+                         
+                        </ion-grid>
+                        <ion-list *ngIf="current_joined_partys.length==0 && has_found_partys">
+                            <ion-item >
+                                <ion-skeleton-text animated></ion-skeleton-text>
+                            </ion-item>
+                            <ion-item >
+                                <ion-skeleton-text animated></ion-skeleton-text>
+                            </ion-item>
+                            <ion-item >
+                                <ion-skeleton-text animated></ion-skeleton-text>
+                            </ion-item>
+                        </ion-list>
+
+                    </div>
+
+
                     <div class="main__screen__buttons">
-                        <section>
-                            <ion-button shape="round" expand="block" (click)="join_party=!join_party" class="btn-width-100" color="primary" >Join Party <mat-icon>celebration</mat-icon></ion-button>
-                        </section>
-                        <section>
+                            <ion-button shape="round" expand="block" (click)="join_party=!join_party" class="btn-width-100" color="secondary" >Join Party <mat-icon>celebration</mat-icon></ion-button>
                             <ion-button  shape="round" expand="block"(click)="create_party=!create_party" class="btn-width-100 btn-margin-top" color="primary" >Create Party <mat-icon>cake</mat-icon></ion-button>    
-                        </section>
                     </div>
                 </ion-card-content>
             </div>
