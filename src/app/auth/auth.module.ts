@@ -5,10 +5,16 @@ import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './auth-routing.module';
 import { AuthComponent } from './auth.component';
 import {MatIconModule} from '@angular/material/icon'; 
-import {MatButtonModule} from '@angular/material/button'; 
+import {MatButtonModule} from '@angular/material/button';
+import { ThankYouComponent } from './thank-you/thank-you.component';
+import { PrivacyComponent } from './privacy/privacy.component';
+import { UserRemoveComponent } from './user-remove/user-remove.component'; 
 @NgModule({
   declarations: [
-    AuthComponent
+    AuthComponent,
+    ThankYouComponent,
+    PrivacyComponent,
+    UserRemoveComponent
   ],
   imports: [
     CommonModule,

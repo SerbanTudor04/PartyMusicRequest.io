@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   signOut,
   Auth,
+  FacebookAuthProvider
 
 
 } from '@angular/fire/auth';
@@ -30,9 +31,7 @@ export class AuthenticateService {
         this.router.navigate(['auth'])
 
         return
-      }
-      console.log(this.user$.value);
-      
+      }      
       this.user$.next(user);
       
     })
@@ -54,8 +53,11 @@ export class AuthenticateService {
     return this.OAuthProvider(new GoogleAuthProvider())
       .then((res) => {
         this.notifS.sendSuccess('Successfully logged in!')
-        this.user$.next(res.user)
-        this.router.navigate(['/']);
+        if(res.user){
+          this.user$.next(res.user)
+          this.router.navigate(['/']);
+  
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -64,6 +66,22 @@ export class AuthenticateService {
       });
   }
 
+  FacebookAuth() {
+    return this.OAuthProvider(new FacebookAuthProvider())
+      .then((res) => {
+        this.notifS.sendSuccess('Successfully logged in!')
+        console.log(res);
+        if(res.user){
+          this.user$.next(res.user)
+          this.router.navigate(['/']);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.notifS.sendWarning('An error occured while logging in!')
+
+      });
+  }
   logout() {
     return signOut(this.auth);
   }
