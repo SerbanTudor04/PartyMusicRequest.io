@@ -62,7 +62,7 @@ export class JoinPartyScreenComponent implements OnInit {
   async initPage(){
     
     this.current_joined_partys= await this.partyS.getCurrentJoinedPartys()
-    console.log(this.current_joined_partys);
+    
     
     if(this.current_joined_partys.length==0){
       this.has_found_partys=false
