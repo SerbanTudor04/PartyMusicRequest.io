@@ -1,0 +1,32 @@
+<ion-content>
+    <app-open-side-nav></app-open-side-nav>
+
+    <div class="contact__container">
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>Contact</ion-card-title>
+                <ion-card-subtitle>We're glad to hear your story!</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+                <div class="contact__form">
+                    <ion-list>
+                        <ion-item>
+                            <ion-label position="floating">Subject</ion-label>
+                            <ion-input required maxlength="32" [(ngModel)]="subject" placeholder="You main ideea.">
+
+                            </ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating">Message</ion-label>
+                            <ion-textarea maxlength="500" required [(ngModel)]="message" placeholder="Your story.">
+                            </ion-textarea>
+                        </ion-item>
+                    </ion-list>
+                    <ion-button (click)="submit_form()" shape="round">
+                        Submit <mat-icon>done</mat-icon>
+                    </ion-button>
+                </div>
+            </ion-card-content>
+        </ion-card>
+    </div>
+</ion-content>
