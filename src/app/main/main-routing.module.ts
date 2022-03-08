@@ -9,6 +9,7 @@ import { MainComponent } from './main.component';
 import { PartyViewWithoutCodeComponent } from './party-view-without-code.component';
 
 import { PartyViewComponent } from './party-view.component';
+import { SetttingsPageComponent } from './setttings-page.component';
 import { ViewQRCodeComponent } from './view-qrcode/view-qrcode.component';
 
 const routes: Routes = [
@@ -21,6 +22,7 @@ const routes: Routes = [
     {path:"pv/:partyID",component:PartyViewComponent},
     {path:"pv",component:PartyViewWithoutCodeComponent},
     {path:'view-qr',component:ViewQRCodeComponent},
+    {path:'settings',component:SetttingsPageComponent},
     {path:"",redirectTo:"home",pathMatch:"full"}
 
   ] }

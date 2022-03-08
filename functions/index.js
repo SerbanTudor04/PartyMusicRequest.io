@@ -115,3 +115,28 @@ app.post("/addContactRequest", async (req, res) => {
 
 
 exports.api = functions.https.onRequest(app);
+
+// end of apis
+
+
+// async functions
+exports.userCreate = functions.auth.user().onCreate(async (usr)=>{
+  const accounData={
+    music_gender: "none",
+    country: "none",
+    user_uid: usr.uid?? "none",
+    user_profile_pic: usr.photoURL ?? "none",
+
+  };
+  console.log(usr.email + "has been created");
+
+  fireStore.collection("/accounts").doc(usr.uid).create(accounData).then(
+      (res)=>{
+        functions.logger.info(`User ${usr.email} added to accounts collection`);
+      },
+  ).catch(
+      (error)=>{
+        functions.logger.error(`An error occured while trying to add user ${usr.email} to accounts.`, error);
+      },
+  );
+});

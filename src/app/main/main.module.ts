@@ -23,9 +23,10 @@ import { QRCodeModule } from 'angular2-qrcode';
 
 import {MatSortModule} from '@angular/material/sort';
 import { ViewQRCodeComponent } from './view-qrcode/view-qrcode.component';
-import { ContactUsComponent } from './contact-us.component'; 
+import { ContactUsComponent } from './contact-us.component';
+import { SetttingsPageComponent } from './setttings-page.component'; 
 @NgModule({
-  declarations: [MainComponent, JoinPartyScreenComponent, PartyViewComponent, OpenSideNavComponent, HomePageComponent, PartyViewWithoutCodeComponent, JoinWithLinkComponent, AboutPageComponent, ViewQRCodeComponent, ContactUsComponent],
+  declarations: [MainComponent, JoinPartyScreenComponent, PartyViewComponent, OpenSideNavComponent, HomePageComponent, PartyViewWithoutCodeComponent, JoinWithLinkComponent, AboutPageComponent, ViewQRCodeComponent, ContactUsComponent, SetttingsPageComponent],
   imports: [
     CommonModule,
     MainRoutingModule,
