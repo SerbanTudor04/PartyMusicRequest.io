@@ -11,6 +11,7 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { firebase } from 'src/environments/firebase_config';
 import {MatIconModule} from '@angular/material/icon'; 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { getFunctions, provideFunctions } from "@angular/fire/functions";
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
+    provideFunctions(() => getFunctions()),
     IonicModule.forRoot(),
     MatIconModule,
     

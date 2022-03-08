@@ -1,3 +1,4 @@
+import { VERSION } from './../../../environments/vars';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -6,6 +7,7 @@ import { Injectable } from '@angular/core';
 export class ConfigService {
   application_name="Party Music Request"
   is_dark:boolean=false;
+  current_version:string=VERSION
   constructor() { 
 
   }

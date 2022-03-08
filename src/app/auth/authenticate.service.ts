@@ -19,6 +19,8 @@ import { NotificationsService } from '../main/services/notifications.service';
 })
 export class AuthenticateService {
   user$ = new BehaviorSubject(this.auth.currentUser);
+
+  redirect_url= new BehaviorSubject<string>("")
   // user_observer = authState(this.auth);
   constructor(
     public router: Router,
@@ -52,16 +54,21 @@ export class AuthenticateService {
   GoogleAuth() {
     return this.OAuthProvider(new GoogleAuthProvider())
       .then((res) => {
-        this.notifS.sendSuccess('Successfully logged in!')
         if(res.user){
+          this.notifS.sendSuccess('Successfully logged in!')
           this.user$.next(res.user)
-          this.router.navigate(['/']);
+          // this.router.navigate(['/']);
+          this.afterLogin()
+
   
+        }
+        if(res=="FirebaseError: Firebase: Error (auth/account-exists-with-different-credential)."){
+          this.notifS.sendWarning('An account was already created using other method! Please consider authenticate via other available method.')
         }
       })
       .catch((error) => {
         console.log(error);
-        this.notifS.sendWarning('An error occured while logging in!')
+        this.notifS.sendWarning('An unexpected error occured while logging in!')
 
       });
   }
@@ -69,20 +76,36 @@ export class AuthenticateService {
   FacebookAuth() {
     return this.OAuthProvider(new FacebookAuthProvider())
       .then((res) => {
-        this.notifS.sendSuccess('Successfully logged in!')
-        console.log(res);
         if(res.user){
+          this.notifS.sendSuccess('Successfully logged in!')
           this.user$.next(res.user)
-          this.router.navigate(['/']);
+          // this.router.navigate(['/']);
+          this.afterLogin()
+        }
+        if(res=="FirebaseError: Firebase: Error (auth/account-exists-with-different-credential)."){
+          this.notifS.sendWarning('An account was already created using other method! Please consider authenticate via other available method.')
         }
       })
       .catch((error) => {
         console.log(error);
-        this.notifS.sendWarning('An error occured while logging in!')
+        this.notifS.sendWarning('An unexpected error occured while logging in!')
 
       });
   }
   logout() {
     return signOut(this.auth);
   }
+
+  afterLogin(){
+    if(String(this.redirect_url.value).length>0){
+      // this.router.navigateByUrl(this.redirect_url.value)
+      window.location.href=this.redirect_url.value
+      return
+    }
+    this.router.navigate(['/'])
+
+
+  }
+
+
 }

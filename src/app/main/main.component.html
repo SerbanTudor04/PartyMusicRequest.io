@@ -3,7 +3,9 @@
 <ion-menu class="" side="start" menuId="first" contentId="main">
    <ion-header>
      <ion-toolbar color="default">
-       <ion-title>{{configS.application_name}}</ion-title>
+       <ion-title style="margin-top: 1rem;">{{configS.application_name}}</ion-title>
+      <ion-item-divider></ion-item-divider>
+
      </ion-toolbar>
    </ion-header>
    <ion-content >
@@ -11,15 +13,20 @@
          <ion-item href="/">Home</ion-item>
          <ion-item href="/join">Partys</ion-item>
          <ion-item href="/about">About us</ion-item>
-         <ion-item>Coming soon</ion-item>
-         <ion-item>Coming soon</ion-item>
+         <ion-item href="/contact">Contact us</ion-item>
       </ion-list>
    </ion-content>
    <ion-footer>
       <ion-toolbar color="default">
+
          <ion-buttons slot="primary">
+            <ion-button href="/settings" shape="round"><mat-icon>settings</mat-icon></ion-button>
+
             <ion-button target="blank" href="https://github.com/SerbanTudor04/PartyMusicRequest.io">
               Github <img width="32" height="32 " src="../../assets/github.png" alt="">
+            </ion-button>
+            <ion-button disabled="true">
+               Version {{configS.current_version}}
             </ion-button>
           </ion-buttons>
        </ion-toolbar>
@@ -27,7 +34,7 @@
  </ion-menu>
 
 <div class="noselect mainapp__container">
-   <div *ngIf="loadingS.isLoading == true" class="">
+   <div *ngIf="loadingS.isLoading" class="">
    <ion-backdrop visible="showBackdrop"></ion-backdrop>
 
       <ion-progress-bar mode="md" type="indeterminate"></ion-progress-bar>
