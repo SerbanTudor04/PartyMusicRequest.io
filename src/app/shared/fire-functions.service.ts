@@ -15,14 +15,11 @@ export class FireFunctionsService {
    call_https(fnc_url:string,data?:any){
 
     const fnc=functions.httpsCallable(this.fns,fnc_url,)
-    console.log(data);
     
     return fnc({subject:data.subject,message:data.message}).then(
       (result)=>{
-        const get_data:any = result.data;
-        const sanitizedMessage = get_data.text;
-         
-      return {message:"",details:"",data:sanitizedMessage}
+
+      return result.data
 
       }
     ).catch((error) => {

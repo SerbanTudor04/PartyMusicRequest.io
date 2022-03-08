@@ -22,7 +22,7 @@
                             </ion-textarea>
                         </ion-item>
                     </ion-list>
-                    <ion-button (click)="submit_form()" shape="round">
+                    <ion-button [disabled]="!allow_submit_form" (click)="submit_form()" shape="round">
                         Submit <mat-icon>done</mat-icon>
                     </ion-button>
                 </div>

@@ -99,7 +99,6 @@ app.post("/addContactRequest", async (req, res) => {
 
   };
 
-
   await fireStore.collection("contacts").doc().create(contactData).then(
       (r)=>{
         functions.logger.info("Contact document added with params", contactData);
