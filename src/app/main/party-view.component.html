@@ -111,7 +111,7 @@
                                                     maxlength="64" placeholder="Ex. Lost Frequencies"></ion-input>
                                             </ion-item>
                                         </div>
-                                        <ion-button shape="round" matTooltip="Send data" (click)="addSong()"
+                                        <ion-button [disabled]="!song_add_data.song_name || !song_add_data.song_author" shape="round" matTooltip="Send data" (click)="addSong()"
                                             color="primary" class="btn-width-100">Add <mat-icon>library_music</mat-icon>
                                         </ion-button>
 
@@ -144,7 +144,7 @@
                                             </ion-item>
                                         </div>
                                         <ion-button shape="round" matTooltip="Send data" (click)="updatePartyInfo()"
-                                            [disabled]="!can_update_info" color="primary" class="btn-width-100">Save
+                                            [disabled]="!can_update_info || !party_data.data.name || !party_data.data.description" color="primary" class="btn-width-100">Save
                                             <mat-icon>save</mat-icon>
                                         </ion-button>
 
