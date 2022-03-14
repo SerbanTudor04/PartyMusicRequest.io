@@ -1,4 +1,6 @@
 <ion-content>
+    <app-open-side-nav></app-open-side-nav>
+
     <ion-card class="settings__card">
         <ion-card-header>
             <ion-card-title>Settings</ion-card-title>
@@ -6,16 +8,20 @@
         <ion-card-content>
             <div class="settings__card__profile">
                 <ion-title>Profile:</ion-title>
-
-
                 <div class="profile__form">
 
                     <ion-list>
                         <ion-item>
-                            <ion-label position="floating">Music Gender</ion-label>
-                            <ion-select [(ngModel)]="music_gender" placeholder="Select One">
-                                <ion-select-option  *ngFor="let gender of music_genders" [value]="gender">{{gender.title}}</ion-select-option>
+                            <ion-label position="floating">Favorite music gender</ion-label>
+                            <ion-select required [(ngModel)]="music_gender" placeholder="Select One">
+                                <ion-select-option *ngFor="let gender of music_genders" [value]="gender">
+                                    {{gender.title}}</ion-select-option>
                             </ion-select>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating">Nationality</ion-label>
+                            <ion-input required placeholder="ex: Romanian" [(ngModel)]="country"></ion-input>
+
                         </ion-item>
                     </ion-list>
 
@@ -23,7 +29,9 @@
 
 
                 <div class="profile__save">
-                    <ion-button disabled="true" (click)="update_profile()" shape="round" expand="block">
+                    <ion-button
+                        [disabled]="this.country.length==0 || !this.music_gender || has_already_submited==true"
+                        (click)="update_profile()" shape="round" expand="block" color="secondary">
                         Save <mat-icon>save</mat-icon>
                     </ion-button>
 

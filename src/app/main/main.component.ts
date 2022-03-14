@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticateService } from '../auth/authenticate.service';
 
 import { ConfigService } from './services/config.service';
 import { LoadingBarService } from './services/loading-bar.service';
@@ -11,7 +12,7 @@ import { SidemenuService } from './services/sidemenu-service.service';
 })
 export class MainComponent implements OnInit {
 
-  constructor(public loadingS:LoadingBarService,public configS:ConfigService,private sidemenuS:SidemenuService) { }
+  constructor(public loadingS:LoadingBarService,public configS:ConfigService,private sidemenuS:SidemenuService,public authS:AuthenticateService) { }
 
   ngOnInit(): void {
   }
