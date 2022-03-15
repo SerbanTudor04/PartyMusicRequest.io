@@ -9,7 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SongsModel } from '../shared/party';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import { async } from '@firebase/util';
+import { doc, onSnapshot } from 'firebase/firestore';
 @Component({
   selector: 'app-party-view',
   templateUrl: './party-view.component.html',
@@ -113,11 +113,27 @@ export class PartyViewComponent implements OnInit {
   async initPage() {
     this.party_data = await this.partyS.getPartyData(this.partyid_code);
 
+
+
+
     this.dataSource = new MatTableDataSource(this.party_data.data.songs);
 
     this.hasAccess = this.party_data.hasAccess;
     if (this.party_data.data.created_by == this.aauth.currentUser?.uid)
       this.is_owner = true;
+    if(this.hasAccess){
+      onSnapshot(doc(this.partyS.afs,`partys/${this.partyid_code}`),(
+        (doc)=>{
+          const new_data:any=doc.data();
+          console.log(new_data);
+          this.dataSource = new MatTableDataSource(new_data.songs);
+          
+  
+        }
+      ))
+    }
+
+
   }
 
   addSong() {

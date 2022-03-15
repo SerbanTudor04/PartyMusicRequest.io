@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
-import { Auth, getAdditionalUserInfo, getAuth } from '@angular/fire/auth';
+import { Auth } from '@angular/fire/auth';
 import { collection } from '@angular/fire/firestore';
-import { PartyModel, SongsModel } from './../../shared/party';
+import { PartyModel } from './../../shared/party';
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import {
@@ -22,11 +22,11 @@ import { NotificationsService } from './notifications.service';
 })
 export class PartyService {
   constructor(
-    private afs: Firestore,
+    public afs: Firestore,
     private aauth: Auth,
     private router: Router,
     private notif: NotificationsService
-  ) {}
+  ) { }
 
   async makeJoinParty(join_code: string) {
     const q_data: any = await this.getDocumentByPartyJoinCode(join_code);
@@ -73,8 +73,7 @@ export class PartyService {
       created_on: this.getCurrentDateTime(),
       created_by_displayName: this.aauth.currentUser?.displayName ?? '',
       open: true,
-      members: [this.aauth.currentUser?.uid]
-      
+      members: [this.aauth.currentUser?.uid],
     };
 
     await addDoc(coll, data)
@@ -198,13 +197,12 @@ export class PartyService {
     );
 
     const q_data = await (await getDocs(q_docs)).docs;
-    let retVal:any[]=[]
+    let retVal: any[] = [];
     for (let index in q_data) {
-
-      retVal.push(q_data[index].data()); 
-      retVal[index].party_id=q_data[index].id
+      retVal.push(q_data[index].data());
+      retVal[index].party_id = q_data[index].id;
     }
-  
+
     return retVal;
   }
 
