@@ -1,0 +1,29 @@
+<ion-content>
+    <ion-card class="not__vf__card">
+        <ion-card-header>
+            <ion-card-title>
+                Verify you email address (coming soon)
+            </ion-card-title>
+            <ion-card-subtitle>
+                Submit form in order to activate your email.
+            </ion-card-subtitle>
+
+            <ion-card-content>
+                <div class="nvf__form">
+                    <ion-list>
+                        <ion-item>
+                            <ion-label position="floating">Email address</ion-label>
+                            <ion-input type="text" [(ngModel)]="email_addr"  required placeholder="ex: example@account.com"></ion-input>
+                        </ion-item>
+                    
+                    </ion-list>
+                    <div style="display: flex; width: 100%;" class="">
+                        <ion-button [disabled]="!email_addr || submited_form || true" expand="block" shape="round">Submit</ion-button>
+                        <ion-button href="/auth" expand="block" shape="round" color="danger"fill="outline">Back</ion-button>
+    
+                    </div>
+                </div>
+            </ion-card-content>
+        </ion-card-header>
+    </ion-card>
+</ion-content>

@@ -9,7 +9,7 @@ import { AuthenticateService } from '../auth/authenticate.service';
 })
 export class FireFunctionsService {
 
-  constructor(private fns:Functions,private authS:AuthenticateService) {
+  constructor(private fns:Functions) {
     
    }
    call_https(fnc_url:string,data?:any){

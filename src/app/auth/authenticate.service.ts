@@ -1,3 +1,4 @@
+import { AccountsService } from './../main/services/accounts.service';
 
 
 import { Injectable, NgZone } from '@angular/core';
@@ -26,7 +27,8 @@ export class AuthenticateService {
     public router: Router,
     private auth: Auth,
     public ngZone: NgZone,
-    private notifS:NotificationsService
+    private notifS:NotificationsService,
+    private accS:AccountsService
   ) {
     this.auth.onAuthStateChanged((user)=>{
       if(!user){
@@ -96,7 +98,15 @@ export class AuthenticateService {
     return signOut(this.auth);
   }
 
-  afterLogin(){
+  async afterLogin(){
+    const acc_Data=await this.accS.getAccountSettings()
+  
+    if(!acc_Data||!acc_Data.has_configured_profile)
+      this.notifS.sendWarning("Hey, it looks like you didn't fully setup your account yet. Please consider do that, by going to settings.")
+
+    if(!this.auth.currentUser?.emailVerified)
+      this.router.navigate(['auth','not-verify'])
+
     if(String(this.redirect_url.value).length>0){
       // this.router.navigateByUrl(this.redirect_url.value)
       window.location.href=this.redirect_url.value
