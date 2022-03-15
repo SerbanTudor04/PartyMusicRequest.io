@@ -8,20 +8,24 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { ThankYouComponent } from './thank-you/thank-you.component';
 import { PrivacyComponent } from './privacy/privacy.component';
-import { UserRemoveComponent } from './user-remove/user-remove.component'; 
+import { UserRemoveComponent } from './user-remove/user-remove.component';
+import { NotVerifyedComponent } from './not-verifyed/not-verifyed.component'; 
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AuthComponent,
     ThankYouComponent,
     PrivacyComponent,
-    UserRemoveComponent
+    UserRemoveComponent,
+    NotVerifyedComponent
   ],
   imports: [
     CommonModule,
     AuthRoutingModule,
     MatIconModule,
     MatButtonModule,
-    IonicModule
+    IonicModule,
+    FormsModule
   ]
 })
 export class AuthModule { }

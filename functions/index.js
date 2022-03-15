@@ -126,9 +126,13 @@ exports.userCreate = functions.auth.user().onCreate(async (usr)=>{
     country: "none",
     user_uid: usr.uid?? "none",
     user_profile_pic: usr.photoURL ?? "none",
+    has_configured_profile:false
 
   };
-  console.log(usr.email + "has been created");
+
+  if(!usr.emailVerified){
+    fireAuth.generateEmailVerificationLink(usr.email??"")
+  }
 
   fireStore.collection("/accounts").doc(usr.uid).create(accounData).then(
       (res)=>{
@@ -140,3 +144,25 @@ exports.userCreate = functions.auth.user().onCreate(async (usr)=>{
       },
   );
 });
+
+
+
+// exports.sendUnverifiedUserEmail= functions.https.onRequest(async (req,res)=>{
+
+//   const retData={
+//     status:"",
+//     message:""
+//   }
+
+//   const email_addr= req.body.data.email;
+//   if(!email_addr){
+//     retData.status="Error"
+//     retData.message="Email parameter is missing or invalid!"
+//   }
+  
+
+//   fireAuth.generateEmailVerificationLink(email_addr)
+
+
+//   res.json(retData)
+// })

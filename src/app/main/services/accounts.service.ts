@@ -1,3 +1,4 @@
+import { FireFunctionsService } from './../../shared/fire-functions.service';
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Firestore, collection } from '@angular/fire/firestore';
@@ -14,7 +15,7 @@ export class AccountsService {
   constructor(
     private afs: Firestore,
     private aauth: Auth,
-    private router: Router,
+    // private router: Router,
     private notif: NotificationsService
   ) { }
 
@@ -27,13 +28,11 @@ export class AccountsService {
         (erorr)=>{
           exists=false;
           console.log(erorr);
+          console.log("create user");
           
-          if(erorr=="FirebaseError: Missing or insufficient permissions."){
+          if(String(erorr).includes("insufficient permissions.")){
             this.notif.sendWarning("User settings doesn't exists!")
             this.createUserAccountDoc()
-          }else{
-            this.notif.sendWarning("You are trying to fetch somebody's else settings!")
-
           }
             
           return erorr;
@@ -56,11 +55,27 @@ export class AccountsService {
         country: "none",
         user_uid: this.aauth.currentUser?.uid ?? "none",
         user_profile_pic: this.aauth.currentUser?.photoURL ?? "none",
+        has_configured_profile:false
     
       };
-      setDoc(doc(this.afs,`accounts/${this.aauth.currentUser?.uid??""}`),accounData)
+      console.log("am, intrat si pe aici");
+      console.log("am, intrat si pe aici");
+      
+      setDoc(doc(this.afs,`accounts/${this.aauth.currentUser?.uid??""}`),accounData).then(
+        ()=>{
+          this.notif.sendSuccess("User setting created with success!Please consider refresh the page!")
+        }
+      ).catch(
+        (erorr)=>{
+          console.log(erorr);
+          this.notif.sendDanger("An unexpected error occured while trying to create users settings")
+
+          
+        }
+      )
     }
   async updateUserAccount(account_data:any){
+    account_data.has_configured_profile=true;
     updateDoc(doc(this.afs,`accounts/${this.aauth.currentUser?.uid?? ""}`),account_data).then(
       ()=>{
         this.notif.sendSuccess("Account settings updated with success!")
