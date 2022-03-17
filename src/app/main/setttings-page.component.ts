@@ -35,6 +35,7 @@ export class SetttingsPageComponent implements OnInit {
 
 
   async initPage(){
+    this.loadingS.turnOn()
     this.account_settings=await this.accS.getAccountSettings()
 
     // select the music gender
@@ -43,7 +44,7 @@ export class SetttingsPageComponent implements OnInit {
         this.music_gender=i;
     this.country=this.account_settings.country === "none"? "": this.account_settings.country 
 
-
+    this.loadingS.turnOff()
   }
 
   update_profile(){
