@@ -87,7 +87,7 @@ export class PartyViewComponent implements OnInit {
   }
 
   doRefresh(event:any){
-    console.log(this.is_allowed_refresh);
+  
     
     if(!this.is_allowed_refresh){
       this.notifS.sendWarning("You need to wait, in order to refresh again!")
@@ -111,6 +111,7 @@ export class PartyViewComponent implements OnInit {
   }
 
   async initPage() {
+    this.loadingS.turnOn()
     this.party_data = await this.partyS.getPartyData(this.partyid_code);
 
 
@@ -125,13 +126,14 @@ export class PartyViewComponent implements OnInit {
       onSnapshot(doc(this.partyS.afs,`partys/${this.partyid_code}`),(
         (doc)=>{
           const new_data:any=doc.data();
-          console.log(new_data);
+          // console.log(new_data);
           this.dataSource = new MatTableDataSource(new_data.songs);
           
   
         }
       ))
     }
+    this.loadingS.turnOff()
 
 
   }

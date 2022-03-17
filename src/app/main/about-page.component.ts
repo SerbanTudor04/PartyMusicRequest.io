@@ -24,13 +24,13 @@ export class AboutPageComponent implements AfterViewInit {
     this.loadingS.turnOn()
     this.drs.getInfoDocument('about').then(
       (retVal:any)=>{
-        this.loadingS.turnOff()
-    
+        
         const local_data=retVal.data()
         
         for(let index in local_data){
           this.data.push(local_data[index])
         }
+        this.loadingS.turnOff()
       }
     ).catch(
       (error)=>{

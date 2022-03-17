@@ -23,6 +23,7 @@ export class JoinWithLinkComponent implements OnInit {
     this.joinParty()
   }
   joinParty(){
+    
     if(this.join_code.length==0)return;
 
     this.loadingS.turnOn()
@@ -31,6 +32,7 @@ export class JoinWithLinkComponent implements OnInit {
         this.loadingS.turnOff()
         if(!retVal)
           this.router.navigate(['join'])
+
       }
     ).catch(
       (error)=>{
