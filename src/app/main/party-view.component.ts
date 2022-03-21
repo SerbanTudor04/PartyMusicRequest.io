@@ -34,7 +34,9 @@ export class PartyViewComponent implements OnInit {
   songs_edited:any[]=[]
   song_modifications:boolean=false;
 
+  last_search:string=""
 
+  view_mode:string="a"
 
   add_song: boolean = false;
   edit_poarty: boolean = false;
@@ -83,7 +85,8 @@ export class PartyViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initPage();
+    this.initPage()
+    
   }
 
   doRefresh(event:any){
@@ -111,11 +114,12 @@ export class PartyViewComponent implements OnInit {
   }
 
   async initPage() {
+
     this.loadingS.turnOn()
+    
+
+
     this.party_data = await this.partyS.getPartyData(this.partyid_code);
-
-
-
 
     this.dataSource = new MatTableDataSource(this.party_data.data.songs);
 
@@ -133,8 +137,8 @@ export class PartyViewComponent implements OnInit {
         }
       ))
     }
+    await this.getLastSearch()
     this.loadingS.turnOff()
-
 
   }
 
@@ -197,14 +201,11 @@ export class PartyViewComponent implements OnInit {
 
   }
 
-
   markASongAsPlayed(element:any){  
     if(this.songs_edited.indexOf(element)==-1)
       this.songs_edited.push(element)
 
   }
-
-
 
   saveSongsPlayed(){
     if(this.songs_edited.length<=0)
@@ -218,20 +219,39 @@ export class PartyViewComponent implements OnInit {
       this.party_data.data.songs[index_of]=el
       
     }
+    // reset list of selected songs
     this.songs_edited=[]
-
     this.partyS.updateSongs(this.partyid_code,this.party_data.data.songs);
-    
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
+
+    localStorage.setItem(`pmr_pv_search__${this.partyid_code}`,filterValue)
+
+    this.applyFilterOnTable(filterValue)
+  }
+
+  applyFilterOnTable(filterValue:string){
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  selectVIewMode(){
+    if(this.view_mode=="a"){
+      this.applyFilterOnTable('')
+      return
+    }
+
+    let mode=false  
+    if(this.view_mode=="y")
+      mode=true
+    this.applyFilterOnTable(String(mode))
+  }
+
 
   get_share_link(join_code:string){
     return `${window.location.protocol}//${window.location.hostname}/join/${join_code}`
@@ -246,6 +266,10 @@ export class PartyViewComponent implements OnInit {
       document.addEventListener('copy', listener);
       document.execCommand('copy');
       }
-  
+
+
+    async getLastSearch(){
+      this.last_search=localStorage.getItem(`pmr_pv_search__${this.partyid_code}`)??""
+    }
 
 }

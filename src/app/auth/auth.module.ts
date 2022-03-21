@@ -11,13 +11,15 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { UserRemoveComponent } from './user-remove/user-remove.component';
 import { NotVerifyedComponent } from './not-verifyed/not-verifyed.component'; 
 import { FormsModule } from '@angular/forms';
+import { TermsComponent } from './terms/terms.component';
 @NgModule({
   declarations: [
     AuthComponent,
     ThankYouComponent,
     PrivacyComponent,
     UserRemoveComponent,
-    NotVerifyedComponent
+    NotVerifyedComponent,
+    TermsComponent
   ],
   imports: [
     CommonModule,
