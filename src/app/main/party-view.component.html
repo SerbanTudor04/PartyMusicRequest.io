@@ -155,14 +155,31 @@
                         </div>
                     </ion-card-title>
                     <ion-card-content class="songs__table__list">
-
-                        <ion-item>
-                            <ion-label position="floating">Search</ion-label>
-                            <ion-input #input (keyup)="applyFilter($event)" maxlength="64"
-                                placeholder="Ex. Are you with me?"></ion-input>
-                        </ion-item>
-
-
+       
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+  
+                                    <ion-item>
+                                        <ion-label position="floating">Search</ion-label>
+                                        <ion-input #input [value]="last_search" (keyup)="applyFilter($event)" maxlength="64"
+                                            placeholder="Ex. Are you with me?"></ion-input>
+                                    </ion-item>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-item>
+                                        <ion-label position="floating">View only</ion-label>
+                                        <ion-select (ionChange)="selectVIewMode()" mode="md" interface="action-sheet"   okText="Ok" cancelText="Cancel" [(ngModel)]="view_mode" placeholder="Select view mode">
+                                            <ion-select-option value="a">All</ion-select-option>
+                                            <ion-select-option value="y">Played</ion-select-option>
+                                            <ion-select-option value="n">Not Played</ion-select-option>
+                                        </ion-select>
+                                    </ion-item>
+                                </ion-col>
+        
+                            </ion-row>
+                        </ion-grid>
+           
                         <table matSort [bgColor]="'dark'" mat-table [dataSource]="dataSource" class="mat-elevation-z0"
                             multiTemplateDataRows>
 
