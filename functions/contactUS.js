@@ -3,17 +3,18 @@ const fireAdminJS = require("./fire");
 const fireStore = fireAdminJS.fireStore;
 const cors = require("cors")({origin: true});
 const express = require("express");
-const process = require("process");
+// const process = require("process");
 const userJS = require("./users.js");
 const cookieParser = require("cookie-parser")();
 const app = express();
-
+const RateLimit = require("express-rate-limit")({
+  windowMs: 1*60*1000, // 1 minute
+  max: 5,
+});
 app.use(cors);
 app.use(cookieParser);
-
-if (!process.env.DEBUG_PMR) {
-  app.use(userJS.validateFirebaseIdToken);
-}
+app.use(RateLimit);
+app.use(userJS.validateFirebaseIdToken);
 
 app.use(express.json());
 
