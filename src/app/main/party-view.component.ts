@@ -39,6 +39,10 @@ export class PartyViewComponent implements OnInit {
   view_mode:string="a"
 
   add_song: boolean = false;
+  add_song_manual:boolean=false;  
+  
+  song_link:string=""
+
   edit_poarty: boolean = false;
   is_owner: boolean = false;
 

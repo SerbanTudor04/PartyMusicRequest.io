@@ -12,7 +12,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { MatTableModule } from '@angular/material/table';
 
-import {MatPaginatorModule} from '@angular/material/paginator'; 
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { IonicModule } from '@ionic/angular';
 import { OpenSideNavComponent } from './open-side-nav/open-side-nav.component';
 import { HomePageComponent } from './home-page.component';
@@ -21,13 +21,28 @@ import { JoinWithLinkComponent } from './join-with-link.component';
 import { AboutPageComponent } from './about-page.component';
 import { QRCodeModule } from 'angular2-qrcode';
 
-import {MatSortModule} from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { ViewQRCodeComponent } from './view-qrcode/view-qrcode.component';
 import { ContactUsComponent } from './contact-us.component';
 import { SetttingsPageComponent } from './setttings-page.component';
-import { LoadingBarComponent } from './loading-bar/loading-bar.component'; 
+import { LoadingBarComponent } from './loading-bar/loading-bar.component';
+
 @NgModule({
-  declarations: [MainComponent, JoinPartyScreenComponent, PartyViewComponent, OpenSideNavComponent, HomePageComponent, PartyViewWithoutCodeComponent, JoinWithLinkComponent, AboutPageComponent, ViewQRCodeComponent, ContactUsComponent, SetttingsPageComponent, LoadingBarComponent],
+  declarations: [
+    MainComponent,
+    JoinPartyScreenComponent,
+    PartyViewComponent,
+    OpenSideNavComponent,
+    HomePageComponent,
+    PartyViewWithoutCodeComponent,
+    JoinWithLinkComponent,
+    AboutPageComponent,
+    ViewQRCodeComponent,
+    ContactUsComponent,
+    SetttingsPageComponent,
+    LoadingBarComponent,
+    
+  ],
   imports: [
     CommonModule,
     MainRoutingModule,
@@ -40,7 +55,7 @@ import { LoadingBarComponent } from './loading-bar/loading-bar.component';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    QRCodeModule
+    QRCodeModule,
   ],
   providers: [],
 })

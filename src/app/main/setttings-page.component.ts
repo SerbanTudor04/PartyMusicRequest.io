@@ -1,6 +1,7 @@
 import { AccountsService } from './services/accounts.service';
 import { Component, OnInit } from '@angular/core';
 import { LoadingBarService } from './services/loading-bar.service';
+import { SpotifyService } from './services/spotify.service';
 
 @Component({
   selector: 'app-setttings-page',
@@ -11,7 +12,7 @@ export class SetttingsPageComponent implements OnInit {
 
   account_settings:any=null;
 
-  constructor(private accS:AccountsService,private loadingS:LoadingBarService) { }
+  constructor(private accS:AccountsService,private loadingS:LoadingBarService,private spotifS:SpotifyService) { }
 
   music_genders:any[]=[
     {title:"Rock",code:"rock"},
@@ -25,18 +26,16 @@ export class SetttingsPageComponent implements OnInit {
 
   has_already_submited:boolean=false;
 
+  isSpotifyLoggedIn:boolean=false;
+
   ngOnInit(): void {
     this.initPage()
   }
 
-
-
-
-
-
   async initPage(){
     this.loadingS.turnOn()
     this.account_settings=await this.accS.getAccountSettings()
+    this.isSpotifyLoggedIn= this.account_settings.spotify_id!=null && this.account_settings.spotify_id!=""
 
     // select the music gender
     for(let i of this.music_genders )
@@ -72,5 +71,7 @@ export class SetttingsPageComponent implements OnInit {
     
   }
 
-
+  makeSpotifyLogin(){
+    this.spotifS.makeSpotifyLogin()
+  }
 }

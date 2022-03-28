@@ -10,6 +10,8 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 2020,
+    sourceType: "module",
+    allowImportExportEverywhere: true,
   },
   rules: {
     "quotes": ["error", "double"],

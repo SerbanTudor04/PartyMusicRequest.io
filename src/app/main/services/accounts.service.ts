@@ -10,14 +10,15 @@ import { NotificationsService } from './notifications.service';
   providedIn: 'root'
 })
 export class AccountsService {
-  
 
   constructor(
     private afs: Firestore,
     private aauth: Auth,
     // private router: Router,
     private notif: NotificationsService
-  ) { }
+  ) {
+
+   }
 
 
     async getAccountSettings(){
@@ -89,5 +90,6 @@ export class AccountsService {
       )
 
   }
+  
 
 }

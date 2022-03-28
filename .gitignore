@@ -5,7 +5,8 @@
 /tmp
 /out-tsc
 /bazel-out
-
+plugins
+resources
 # firebase_config.ts
 # Node
 /node_modules
@@ -48,3 +49,6 @@ www
 .runtimeconfig.json
 
 android
+platforms
+
+*/node_modules

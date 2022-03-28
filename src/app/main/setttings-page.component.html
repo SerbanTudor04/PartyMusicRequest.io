@@ -1,45 +1,53 @@
 <ion-content>
     <app-open-side-nav></app-open-side-nav>
     <app-loading-bar></app-loading-bar>
-
-    <ion-card class="settings__card">
-        <ion-card-header>
-            <ion-card-title>Settings</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-            <div class="settings__card__profile">
-                <ion-title>Profile:</ion-title>
-                <div class="profile__form">
-
-                    <ion-list>
-                        <ion-item>
-                            <ion-label position="floating">Favorite music gender</ion-label>
-                            <ion-select required [(ngModel)]="music_gender" placeholder="Select One">
-                                <ion-select-option *ngFor="let gender of music_genders" [value]="gender">
-                                    {{gender.title}}</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating">Nationality</ion-label>
-                            <ion-input required placeholder="ex: Romanian" [(ngModel)]="country"></ion-input>
-
-                        </ion-item>
-                    </ion-list>
-
+    <div class="settings__card">
+        <ion-card class="">
+            <ion-card-header>
+                <ion-card-title>Settings</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <div class="settings__card__profile">
+                    <ion-title>Profile:</ion-title>
+                    <div class="profile__form">
+    
+                        <ion-list>
+                            <ion-item>
+                                <ion-label position="floating">Favorite music gender</ion-label>
+                                <ion-select required [(ngModel)]="music_gender" placeholder="Select One">
+                                    <ion-select-option *ngFor="let gender of music_genders" [value]="gender">
+                                        {{gender.title}}</ion-select-option>
+                                </ion-select>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="floating">Nationality</ion-label>
+                                <ion-input required placeholder="ex: Romanian" [(ngModel)]="country"></ion-input>
+    
+                            </ion-item>
+                        </ion-list>
+    
+                    </div>
+    
+    
+                    <div class="profile__save">
+                        <ion-button
+                            [disabled]="this.country.length==0 || !this.music_gender || has_already_submited==true"
+                            (click)="update_profile()" shape="round" expand="block" color="secondary">
+                            Save <mat-icon>save</mat-icon>
+                        </ion-button>
+    
+                    </div>
                 </div>
+    
+    
+            </ion-card-content>
+        </ion-card>
+        <ion-button (click)="makeSpotifyLogin()" *ngIf="!isSpotifyLoggedIn" size="large" expand="block" color= "dark" shape="round">
+            Connect with <ion-avatar class="spotify__logo"  slot="end">
+                <ion-img    src="../../assets/spotify-2.svg"></ion-img>
 
+            </ion-avatar>
+        </ion-button>
+    </div>
 
-                <div class="profile__save">
-                    <ion-button
-                        [disabled]="this.country.length==0 || !this.music_gender || has_already_submited==true"
-                        (click)="update_profile()" shape="round" expand="block" color="secondary">
-                        Save <mat-icon>save</mat-icon>
-                    </ion-button>
-
-                </div>
-            </div>
-
-
-        </ion-card-content>
-    </ion-card>
 </ion-content>

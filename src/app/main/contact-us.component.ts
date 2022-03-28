@@ -33,7 +33,7 @@ export class ContactUsComponent implements OnInit {
 
     this.allow_submit_form=false
 
-    this.fnsS.call_https("api/addContactRequest",{message:this.message,subject:this.subject}).then(
+    this.fnsS.call_https("contactUsApi/addContactRequest",{message:this.message,subject:this.subject}).then(
       (res:any)=>{        
         setTimeout(()=>{
           this.allow_submit_form=true
