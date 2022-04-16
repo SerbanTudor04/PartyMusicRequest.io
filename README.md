@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img  src="https://firebasestorage.googleapis.com/v0/b/partymusicrequest.appspot.com/o/logo.png?alt=media&token=8e69c656-dac8-4f08-80f5-0105cbf8c04b" alt="Project logo"></a>
+ <img  src="https://firebasestorage.googleapis.com/v0/b/partymusicrequest.appspot.com/o/logo.png?alt=media&token=8e69c656-dac8-4f08-80f5-0105cbf8c04b" width="128" height="128" alt="Project logo"></a>
 </p>
 
 <h3 align="center">PartyMusicRequest.io</h3>
@@ -69,13 +69,6 @@ In work...
 ## 🚀 Deployment <a name = "deployment"></a>
 
 Add additional notes about how to deploy this on a live system.
-
-## ⛏️ Built Using <a name = "built_using"></a>
-
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
 
 ## ✍️ Authors <a name = "authors"></a>
 
