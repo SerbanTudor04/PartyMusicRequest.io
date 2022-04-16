@@ -1,6 +1,6 @@
+
 import { Injectable } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { FireFunctionsService } from 'src/app/shared/fire-functions.service';
 import { NotificationsService } from './notifications.service';
 
 @Injectable({
@@ -9,14 +9,28 @@ import { NotificationsService } from './notifications.service';
 export class SpotifyService {
 
   constructor(
-    private afs: Firestore,
-    private aauth: Auth,
-    // private router: Router,
-    private notif: NotificationsService
+    private fireFunctionsS: FireFunctionsService,
+    private notifS: NotificationsService
+
   ) {
    }
 
     makeSpotifyLogin(){
-      this.notif.sendWarning("Spotify login is not implemented yet!")
+      // this.notif.sendWarning("Spotify login is not implemented yet!")
+      this.fireFunctionsS.call_https('getRedirectAuthSpotify',{}).then(
+        (data:any) => {
+          
+          
+          if(data.data.redirectURL){
+          
+            document.cookie="state="+data.data.state;
+            window.location.href=data.data.redirectURL
+            
+          }else{
+            this.notifS.sendWarning("Error: "+data.error)
+          }
+          
+        }
+      )
     }
 }

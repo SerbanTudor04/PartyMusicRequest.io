@@ -58,5 +58,6 @@ import { LoadingBarComponent } from './loading-bar/loading-bar.component';
     QRCodeModule,
   ],
   providers: [],
+  exports:[LoadingBarComponent]
 })
 export class MainModule {}

@@ -1,89 +1,145 @@
-// const functions = require("firebase-functions");
-// const cookieParser = require("cookie-parser");
-// const crypto = require("crypto");
-// const fireJS= require("./fire");
-// const fireStore=fireJS.fireStore;
-// const fireAuth=fireJS.fireAuth;
+const functions = require("firebase-functions");
+const fireAdminJS = require("./fire");
+const fireStore = fireAdminJS.fireStore;
+const cors = require("cors")({origin: true, credentials: true});
+const crypto = require("crypto");
+const cookieParser = require("cookie-parser")();
+const SpotifyWebApi = require("spotify-web-api-node");
+const rateLimit = require("express-rate-limit")({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 5,
+});
+const userJS=require("./users");
+
+// Spotify API
+const applyMiddleware = (handler) => (req, res) => {
+  return rateLimit(req, res, () => {
+    return cors(req, res, () => {
+      return cookieParser(req, res, () => {
+        return userJS.validateFirebaseIdToken(req, res, () => {
+          return handler(req, res);
+        });
+      });
+    });
+  });
+};
 
 
-// // Spotify OAuth 2 setup
-// // TODO: Configure the `spotify.client_id` and `spotify.client_secret` Google Cloud environment variables.
-// const SpotifyWebApi = require("spotify-web-api-node");
-// const Spotify = new SpotifyWebApi({
-//   clientId: functions.config().spotify.client_id,
-//   clientSecret: functions.config().spotify.client_secret,
-//   redirectUri: `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/popup.html`,
-// });
+const Spotify = new SpotifyWebApi({
+  clientId: functions.config().spotify.client_id,
+  clientSecret: functions.config().spotify.client_secret,
+  redirectUri: "https://partymusicrequest.web.app/auth/callback/spotify",
+});
 
-// // Scopes to request.
-// const OAUTH_SCOPES = ["user-read-email"];
+// Spotify auth scopes
+const OAUTH_SCOPES = [
+  "user-read-email",
+  "user-read-currently-playing",
+  "user-read-playback-position",
+  "user-modify-playback-state",
+];
 
-// /**
-//  * Redirects the User to the Spotify authentication consent screen. Also the 'state' cookie is set for later state
-//  * verification.
-//  */
-// exports.redirect = functions.https.onRequest((req, res) => {
-//   cookieParser()(req, res, () => {
-//     const state = req.cookies.state || crypto.randomBytes(20).toString("hex");
-//     functions.logger.log("Setting verification state:", state);
-//     res.cookie("state", state.toString(), {maxAge: 3600000, secure: true, httpOnly: true});
-//     const authorizeURL = Spotify.createAuthorizeURL(OAUTH_SCOPES, state.toString());
-//     res.redirect(authorizeURL);
-//   });
-// });
+exports.getRedirectAuthSpotify = functions.https.onRequest(
+    applyMiddleware(
+        async (req, res) => {
+          const state = req.cookies.state || crypto.randomBytes(20).toString("hex");
+          functions.logger.log("Setting verification state:", state);
+          res.cookie("state", state.toString(), {
+            maxAge: 3600000,
+            secure: true,
+            httpOnly: true,
+          });
+          const authorizeURL = Spotify.createAuthorizeURL(
+              OAUTH_SCOPES,
+              state.toString(),
+          );
+          res.send({data: {redirectURL: authorizeURL, state: state.toString()}, status: 200});
+        }),
+);
 
-// /**
-//  * Exchanges a given Spotify auth code passed in the 'code' URL query parameter for a Firebase auth token.
-//  * The request also needs to specify a 'state' query parameter which will be checked against the 'state' cookie.
-//  * The Firebase custom auth token is sent back in a JSONP callback function with function name defined by the
-//  * 'callback' query parameter.
-//  */
-// exports.token = functions.https.onRequest((req, res) => {
-//   try {
-//     cookieParser()(req, res, () => {
-//       functions.logger.log("Received verification state:", req.cookies.state);
-//       functions.logger.log("Received state:", req.query.state);
-//       if (!req.cookies.state) {
-//         throw new Error("State cookie not set or expired. Maybe you took too long to authorize. Please try again.");
-//       } else if (req.cookies.state !== req.query.state) {
-//         throw new Error("State validation failed");
-//       }
-//       functions.logger.log("Received auth code:", req.query.code);
-//       Spotify.authorizationCodeGrant(req.query.code, (error, data) => {
-//         if (error) {
-//           throw error;
-//         }
-//         functions.logger.log(
-//             "Received Access Token:",
-//             data.body["access_token"],
-//         );
-//         Spotify.setAccessToken(data.body["access_token"]);
+exports.validateSpotifyToken = functions.https.onRequest(applyMiddleware(
+    async (req, res) => {
+      try {
+        const userUID = String(req.user.uid);
+        const queryState = req.query.state ?? req.body.data.state;
+        const queryCode = req.query.code ?? req.body.data.code;
+        if ( !queryState || !queryCode) {
+          throw new Error(
+              "State cookie not set or expired. Maybe you took too long to authorize. Please try again.",
+          );
+        }
 
-//         Spotify.getMe(async (error, userResults) => {
-//           if (error) {
-//             throw error;
-//           }
-//           functions.logger.log(
-//               "Auth code exchange result received:",
-//               userResults,
-//           );
-//           // We have a Spotify access token and the user identity now.
-//           const accessToken = data.body["access_token"];
-//           const spotifyUserID = userResults.body["id"];
-//           const profilePic = userResults.body["images"][0]["url"];
-//           const userName = userResults.body["display_name"];
-//           const email = userResults.body["email"];
+        Spotify.authorizationCodeGrant(queryCode, (error, data) => {
+          if (error) {
+            functions.logger.log("Error retrieving access token at user"+userUID, error);
+            throw error;
+          }
+          functions.logger.log(
+              "Received Access Token:",
+              data.body["access_token"],
+          );
+          Spotify.setAccessToken(data.body["access_token"]);
 
-//           // Create a Firebase account and get the Custom Auth Token.
-//           const firebaseToken = await createFirebaseAccount(spotifyUserID, userName, profilePic, email, accessToken);
-//           // Serve an HTML page that signs the user in and updates the user profile.
-//           res.jsonp({token: firebaseToken});
-//         });
-//       });
-//     });
-//   } catch (error) {
-//     res.jsonp({error: error.toString()});
-//   }
-//   return null;
-// });
+          Spotify.getMe(async (error, userResults) => {
+            if (error) {
+              throw error;
+            }
+            functions.logger.log(
+                "User: "+userUID+" Auth code exchange result received:",
+                userResults,
+            );
+            // We have a Spotify access token and the user identity now.
+            const accessToken = data.body["access_token"];
+            const spotifyUserID = userResults.body["id"];
+            // Save the access token to the Firebase Realtime Database
+            const firebaseToken = await updateFireAccountData(
+                userUID,
+                spotifyUserID,
+                accessToken,
+            );
 
+            // Serve an HTML page that signs the user in and updates the user profile.
+            res.jsonp({data: {token: firebaseToken}, status: 200});
+          });
+        });
+      } catch (error) {
+        res.status(400);
+        res.jsonp({data: {error: error.toString()}, status: 400});
+      }
+      return null;
+    },
+));
+
+/**
+ * Updates a Firebase account with the given user profile and returns a custom auth token allowing
+ * signing-in this account.
+ * Also saves the accessToken to the datastore at /accounts/$uid
+ *
+ * @param {user} uid User profile object returned by Firebase Auth
+ * @param {spotifyID} spotifyID Spotify user ID
+ * @param {accessToken} accessToken The access token to exchange for a Firebase custom auth token
+ * @return {Promise<string>} The Firebase custom auth token in a promise.
+ */
+async function updateFireAccountData(uid, spotifyID, accessToken) {
+  const userData = await fireStore.collection("accounts").doc(uid).get();
+
+  if (userData.exists) {
+    // Update the user's Spotify ID and access token in the Realtime Database
+    const data = userData.data();
+    data.spotifyID = spotifyID;
+    data.spotify_access_token = accessToken;
+    await fireStore.collection("accounts").doc(uid).update(data);
+    const spotifyUid = `spotify:${spotifyID}`;
+    const customToken = await fireAdminJS.fireAuth.createCustomToken(
+        spotifyUid,
+    );
+    functions.logger.log(
+        "Created Custom token for UID \"",
+        uid,
+        "\" Token:",
+        customToken,
+    );
+    return customToken;
+  }
+  return null;
+}

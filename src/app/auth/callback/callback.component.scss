@@ -1,0 +1,16 @@
+.no--redirect{
+    position: relative;
+    margin: auto;
+    padding: auto;
+
+    .no--redirect__title{
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 1rem;
+        @media screen and (max-width: 768px){
+            font-size: 1rem;
+        }             
+        
+    }
+}

@@ -1,3 +1,4 @@
+import { MainModule } from './../main/main.module';
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,6 +13,7 @@ import { UserRemoveComponent } from './user-remove/user-remove.component';
 import { NotVerifyedComponent } from './not-verifyed/not-verifyed.component'; 
 import { FormsModule } from '@angular/forms';
 import { TermsComponent } from './terms/terms.component';
+import { CallbackComponent } from './callback/callback.component';
 @NgModule({
   declarations: [
     AuthComponent,
@@ -19,7 +21,8 @@ import { TermsComponent } from './terms/terms.component';
     PrivacyComponent,
     UserRemoveComponent,
     NotVerifyedComponent,
-    TermsComponent
+    TermsComponent,
+    CallbackComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +30,8 @@ import { TermsComponent } from './terms/terms.component';
     MatIconModule,
     MatButtonModule,
     IonicModule,
-    FormsModule
+    FormsModule,
+    MainModule
   ]
 })
 export class AuthModule { }

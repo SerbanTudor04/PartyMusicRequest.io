@@ -10,8 +10,10 @@ import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { firebase } from 'src/environments/firebase_config';
 import {MatIconModule} from '@angular/material/icon'; 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { getFunctions, provideFunctions } from "@angular/fire/functions";
+import { getPerformance , providePerformance } from "@angular/fire/performance";
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -26,8 +28,10 @@ import { getFunctions, provideFunctions } from "@angular/fire/functions";
     provideDatabase(() => getDatabase()),
     provideFirestore(() => getFirestore()),
     provideFunctions(() => getFunctions()),
+    providePerformance(() => getPerformance()),
     IonicModule.forRoot(),
     MatIconModule,
+    HttpClientModule
     
   ],
   providers: [],
