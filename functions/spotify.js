@@ -1,28 +1,11 @@
 const functions = require("firebase-functions");
 const fireAdminJS = require("./fire");
 const fireStore = fireAdminJS.fireStore;
-const cors = require("cors");
 const crypto = require("crypto");
-const cookieParser = require("cookie-parser")();
 const SpotifyWebApi = require("spotify-web-api-node");
-const rateLimit = require("express-rate-limit")({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 5,
-});
-const userJS=require("./users");
+const middlewares=require("./middleware.js");
 
 // Spotify API
-const applyMiddleware = (handler) => (req, res) => {
-  return rateLimit(req, res, () => {
-    return cors({origin: true, credentials: true})(req, res, () => {
-      return cookieParser(req, res, () => {
-        return userJS.validateFirebaseIdToken(req, res, () => {
-          return handler(req, res);
-        });
-      });
-    });
-  });
-};
 
 
 const Spotify = new SpotifyWebApi({
@@ -40,7 +23,7 @@ const OAUTH_SCOPES = [
 ];
 
 exports.getRedirectAuthSpotify = functions.https.onRequest(
-    applyMiddleware(
+    middlewares.applyMiddleware(
         async (req, res) => {
           const state = req.cookies.state || crypto.randomBytes(20).toString("hex");
           functions.logger.log("Setting verification state:", state);
@@ -57,7 +40,7 @@ exports.getRedirectAuthSpotify = functions.https.onRequest(
         }),
 );
 
-exports.validateSpotifyToken = functions.https.onRequest(applyMiddleware(
+exports.validateSpotifyToken = functions.https.onRequest(middlewares.applyMiddleware(
     async (req, res) => {
       try {
         const userUID = String(req.user.uid);

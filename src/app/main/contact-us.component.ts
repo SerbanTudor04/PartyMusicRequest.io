@@ -15,6 +15,20 @@ export class ContactUsComponent implements OnInit {
   constructor(private fnsS:FireFunctionsService,private loadingS:LoadingBarService,private notifS:NotificationsService) { }
 
   ngOnInit(): void {
+    this.loadingS.turnOn()
+    this.fnsS.call_https("getCSRFToken").then(
+      (res:any)=>{
+        if(res.status==200){
+          console.log(res.data)
+        }
+        this.loadingS.turnOff()
+      }).catch(
+        (err:any)=>{
+          console.log(err)
+        this.loadingS.turnOff()
+
+        }
+      )
   }
 
 

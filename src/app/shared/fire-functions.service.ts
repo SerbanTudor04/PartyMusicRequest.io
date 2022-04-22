@@ -49,5 +49,4 @@ export class FireFunctionsService {
        this.api_url="http://localhost:5001/partymusicrequest/us-central1/";
       }
    }
-
 }

@@ -20,7 +20,7 @@ app.use(cors);
 app.use(cookieParser);
 app.use(RateLimit);
 app.use(userJS.validateFirebaseIdToken);
-app.use(csrf({ cookie: true }));
+app.use(csrf({cookie: true}));
 app.use(express.json());
 
 app.post("/addContactRequest", async (req, res) => {
