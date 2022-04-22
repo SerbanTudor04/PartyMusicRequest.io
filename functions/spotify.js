@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const fireAdminJS = require("./fire");
 const fireStore = fireAdminJS.fireStore;
-const cors = require("cors")({origin: true, credentials: true});
+const cors = require("cors");
 const crypto = require("crypto");
 const cookieParser = require("cookie-parser")();
 const SpotifyWebApi = require("spotify-web-api-node");
@@ -14,7 +14,7 @@ const userJS=require("./users");
 // Spotify API
 const applyMiddleware = (handler) => (req, res) => {
   return rateLimit(req, res, () => {
-    return cors(req, res, () => {
+    return cors({origin: true, credentials: true})(req, res, () => {
       return cookieParser(req, res, () => {
         return userJS.validateFirebaseIdToken(req, res, () => {
           return handler(req, res);

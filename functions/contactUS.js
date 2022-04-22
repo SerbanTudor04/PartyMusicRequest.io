@@ -11,11 +11,16 @@ const RateLimit = require("express-rate-limit")({
   windowMs: 1*60*1000, // 1 minute
   max: 5,
 });
+
+
+const csrf = require("csurf");
+
+
 app.use(cors);
 app.use(cookieParser);
 app.use(RateLimit);
 app.use(userJS.validateFirebaseIdToken);
-
+app.use(csrf({ cookie: true }));
 app.use(express.json());
 
 app.post("/addContactRequest", async (req, res) => {

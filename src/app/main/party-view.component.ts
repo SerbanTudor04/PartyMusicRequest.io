@@ -160,7 +160,7 @@ export class PartyViewComponent implements OnInit {
       .then((song: any) => {
         // console.log(song);
 
-        this.dataSource.data.push(song)
+        // this.dataSource.data.push(song)
 
         this.song_add_data.song_name=""
         this.song_add_data.song_author=""
