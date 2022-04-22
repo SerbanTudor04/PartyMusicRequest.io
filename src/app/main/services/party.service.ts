@@ -177,14 +177,15 @@ export class PartyService {
   }
 
   async updateSongs(partyID: string, songs: any[]) {
-    let q_doc = doc(this.afs, `partys/${partyID}`);
-    // let ret_data: any = (await getDoc(q_doc)).data();
-    updateDoc(q_doc, { songs: songs })
+    
+    return await updateDoc(doc(this.afs, `partys/${partyID}`), { songs: songs })
       .then((response) => {
         console.log(response);
+        return response;
       })
       .catch((error) => {
         console.error(error);
+        return error
       });
   }
 

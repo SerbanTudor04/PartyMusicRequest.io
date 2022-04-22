@@ -118,11 +118,7 @@ export class PartyViewComponent implements OnInit {
   }
 
   async initPage() {
-
     this.loadingS.turnOn()
-    
-
-
     this.party_data = await this.partyS.getPartyData(this.partyid_code);
 
     this.dataSource = new MatTableDataSource(this.party_data.data.songs);
@@ -200,9 +196,6 @@ export class PartyViewComponent implements OnInit {
         }, 10000)
       }
     )
-
-
-
   }
 
   markASongAsPlayed(element:any){  
@@ -215,17 +208,26 @@ export class PartyViewComponent implements OnInit {
     if(this.songs_edited.length<=0)
       return;
 
-    for(let i in this.songs_edited){
-      
+    for(let i in this.songs_edited){      
       let el=this.songs_edited[i]
-      let index_of=this.party_data.data.songs.indexOf(el)
-      el.played=true;
-      this.party_data.data.songs[index_of]=el
+
+      let index_of=this.party_data.data.songs.findIndex((x:any)=>x.song_name === el.song_name && x.song_author === el.song_author)
+
+      if(index_of!=-1){
+        this.party_data.data.songs[index_of].played=true;
+      }else{
+        this.notifS.sendWarning("Something went wrong, please refresh the page!")
+      }
       
     }
     // reset list of selected songs
     this.songs_edited=[]
-    this.partyS.updateSongs(this.partyid_code,this.party_data.data.songs);
+  
+    // update the party
+    this.loadingS.turnOn()
+    this.partyS.updateSongs(this.partyid_code,this.party_data.data.songs).finally(()=>{
+      this.loadingS.turnOff()
+    });
   }
 
   applyFilter(event: Event) {
