@@ -4,7 +4,6 @@ const fireStore = fireAdminJS.fireStore;
 const crypto = require("crypto");
 const SpotifyWebApi = require("spotify-web-api-node");
 const middlewares=require("./middleware.js");
-
 // Spotify API
 
 
@@ -40,7 +39,7 @@ exports.getRedirectAuthSpotify = functions.https.onRequest(
         }),
 );
 
-exports.validateSpotifyToken = functions.https.onRequest(middlewares.applyMiddleware(
+exports.setupSpotifyToken = functions.https.onRequest(middlewares.applyMiddleware(
     async (req, res) => {
       try {
         const userUID = String(req.user.uid);
@@ -96,6 +95,114 @@ exports.validateSpotifyToken = functions.https.onRequest(middlewares.applyMiddle
     },
 ));
 
+exports.addSpotifySongToParty = functions.https.onRequest(middlewares.applyMiddleware(
+    async (req, res) => {
+      try {
+        const userUID = String(req.user.uid);
+        const partyID=req.body.data.partyID;
+        const songLink=req.body.data.songLink;
+
+        const isMemberOfParty=await validateIfUserIsMemberOfParty(userUID, partyID);
+        if (!isMemberOfParty) {
+          throw new Error("You are not a member of this party");
+        }
+
+        const spotifyAccessToken = await getUserSpotifyAccessToken(userUID);
+        if (!spotifyAccessToken) {
+          throw new Error("You need to associate a Spotify account to your PMR account first");
+        }
+
+        const songID= getSongID(songLink);
+        if (!songID) {
+          throw new Error("Song ID not found or song link is invalid!");
+        }
+
+        functions.logger.info("User "+userUID+" added song "+songID+" to party "+partyID);
+
+        Spotify.setAccessToken(spotifyAccessToken);
+        Spotify.getTrack(songID, async (error, data) => {
+          if (error) {
+            functions.logger.error("Error retrieving song info at user"+userUID, error);
+            throw error;
+          }
+          functions.logger.info("User:"+userUID+" Song info received:", data);
+          const songData=data.body;
+          const songName=songData.name;
+          const songArtist=songData.artists[0].name;
+          const songAlbum=songData.album.name;
+          const songDuration=songData.duration_ms;
+
+          await addSonginParty(partyID, songID, songName, songArtist, songAlbum, songDuration, songLink);
+          res.jsonp({data: {
+            songName: songName,
+            songArtist: songArtist,
+            songAlbum: songAlbum,
+            songDuration: songDuration,
+            songLink: songLink,
+          }, status: 200});
+        });
+      } catch (error) {
+        res.status(400);
+        res.jsonp({data: {error: error.toString()}, status: 400});
+      }
+    },
+));
+
+
+exports.refreshSpotifyToken = functions.https.onRequest(middlewares.applyMiddleware(
+
+    async (req, res) => {
+      try {
+        const userUID = String(req.user.uid);
+        const spotifyAccessToken = await getUserSpotifyAccessToken(userUID);
+        if (!spotifyAccessToken) {
+          throw new Error("You need to associate a Spotify account to your PMR account first");
+        }
+        Spotify.
+            Spotify.refreshAccessToken(spotifyAccessToken, async (error, data) => {
+              if (error) {
+                functions.logger.error("Error refreshing access token at user"+userUID, error);
+                throw error;
+              }
+              functions.logger.info("User:"+userUID+" Access token refreshed:", data);
+              const newAccessToken = data.body["access_token"];
+              await updateFireAccountData(userUID, null, newAccessToken);
+              res.jsonp({data: {token: newAccessToken}, status: 200});
+            });
+      } catch (error) {
+        res.status(400);
+        res.jsonp({data: {error: error.toString()}, status: 400});
+      }
+      return null;
+    },
+));
+
+exports.validateSpotifyAccessToken= functions.https.onRequest(middlewares.applyMiddleware(
+    async (req, res) => {
+      try {
+        const userUID = String(req.user.uid);
+        const spotifyAccessToken = await getUserSpotifyAccessToken(userUID);
+        if (!spotifyAccessToken) {
+          throw new Error("You need to associate a Spotify account to your PMR account first");
+        }
+        Spotify.setAccessToken(spotifyAccessToken);
+        Spotify.getMe(async (error, data) => {
+          if (error) {
+            functions.logger.error("Error retrieving user profile at user"+userUID, error);
+            throw error;
+          }
+          functions.logger.info("User:"+userUID+" User profile received:", data);
+          res.jsonp({data: {token: spotifyAccessToken}, status: 200});
+        });
+      } catch (error) {
+        res.status(400);
+        res.jsonp({data: {error: error.toString()}, status: 400});
+      }
+      return null;
+    },
+));
+
+
 /**
  * Updates a Firebase account with the given user profile and returns a custom auth token allowing
  * signing-in this account.
@@ -112,8 +219,12 @@ async function updateFireAccountData(uid, spotifyID, accessToken) {
   if (userData.exists) {
     // Update the user's Spotify ID and access token in the Realtime Database
     const data = userData.data();
-    data.spotifyID = spotifyID;
-    data.spotify_access_token = accessToken;
+    if (spotifyID) {
+      data.spotifyID = spotifyID;
+    }
+    if (accessToken) {
+      data.spotify_access_token = accessToken;
+    }
     await fireStore.collection("accounts").doc(uid).update(data);
     const spotifyUid = `spotify:${spotifyID}`;
     const customToken = await fireAdminJS.fireAuth.createCustomToken(
@@ -126,6 +237,88 @@ async function updateFireAccountData(uid, spotifyID, accessToken) {
         customToken,
     );
     return customToken;
+  }
+  return null;
+}
+
+/**
+  * Validates if the user is a member of the party
+  * @param {string} userUID
+  * @param {string} partyID
+  * @return {Promise<boolean>}
+  *
+  */
+async function validateIfUserIsMemberOfParty(userUID, partyID) {
+  const partyData = await fireStore.collection("partys").doc(partyID).get();
+  if (partyData.exists) {
+    const partyMembers=partyData.data().members;
+    if (partyMembers.includes(userUID)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+  * Adds a song to the party
+  * @param {string} partyID The ID of the party
+  * @param {string} songID The ID of the song
+  * @param {string} songName The name of the song
+  * @param {string} songArtist The artist of the song
+  * @param {string} songAlbum The album of the song
+  * @param {number} songDuration The duration of the song
+  * @param {string} songLink The link to the song
+  * @return {Promise<boolean>} True if the song was added successfully
+  *
+  */
+async function addSonginParty(partyID, songID, songName, songArtist, songAlbum, songDuration, songLink) {
+  try {
+    const partyRef = fireStore.collection("partys").doc(partyID);
+    const partyData = await partyRef.get();
+    if (partyData.exists) {
+      const partyData = partyData.data();
+      const songList = partyData.songList;
+      songList.push({
+        songID: songID,
+        songName: songName,
+        songArtist: songArtist,
+        songAlbum: songAlbum,
+        songDuration: songDuration,
+        songLink: songLink,
+      });
+      await partyRef.update({songList: songList});
+    }
+    return true;
+  } catch (error) {
+    functions.logger.error("Error adding song to party", error);
+    return false;
+  }
+}
+
+/**
+  * Gets the song ID from the song link
+  * @param {string} songLink
+  * @return {string}
+  */
+function getSongID(songLink) {
+  try {
+    const songID=songLink.split("/")[4];
+    return songID;
+  } catch (error) {
+    return null;
+  }
+}
+
+/**
+ * Gets the user's Spotify access token from the datastore
+ * @param {string} userUID
+ * @return {Promise<string>}
+ */
+async function getUserSpotifyAccessToken(userUID) {
+  const userData = await fireStore.collection("accounts").doc(userUID).get();
+  if (userData.exists) {
+    const data = userData.data();
+    return data.spotify_access_token;
   }
   return null;
 }

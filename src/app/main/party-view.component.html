@@ -98,39 +98,16 @@
                             <div *ngIf="add_song" class="pv__add_song pv__blocks">
                                 <ion-card class="mat-elevation-z0">
                                     <ion-card-content>
-                                        <ion-button (click)="add_song_manual=!add_song_manual" shape="round" color="dark" fill="outline" >Change Mode</ion-button>
-
-                                        <div   *ngIf="!add_song_manual">
-                                            <ion-title>Add song using Spotify</ion-title>
-
+                                        <div>
                                             <ion-item>
-                                                <ion-label position="floating">Address</ion-label>
-                                                <ion-input  [(ngModel)]="song_link"></ion-input>
+                                                <ion-label position="floating">Spotify song share link</ion-label>
+                                                <ion-input placeholder="ex: https://open.spotify.com/track/6OvuUIMmycJz7QdbC5SJNg?si=0803035c260e46cb"  [(ngModel)]="song_link"></ion-input>
                                             </ion-item>
-                                            <ion-button shape="round" expand="block" [disabled]="add_song_manual ||  !song_link">Add</ion-button>
+                                            <ion-button (click)="addSong()"  shape="round" expand="block" >Add</ion-button>
                                             
                                         </div>
 
-                                        <div *ngIf="add_song_manual">
-                                            <div class="form-submit-class">
-                                                <ion-title>Add song manual</ion-title>
-
-                                                <ion-item>
-                                                    <ion-label position="floating">Name</ion-label>
-                                                    <ion-input [(ngModel)]="song_add_data.song_name" required matInput
-                                                        maxlength="64" placeholder="Ex. Are you with me?"></ion-input>
-                                                </ion-item>
-                                                <ion-item>
-                                                    <ion-label position="floating">Author</ion-label>
-                                                    <ion-input [(ngModel)]="song_add_data.song_author" required matInput
-                                                        maxlength="64" placeholder="Ex. Lost Frequencies"></ion-input>
-                                                </ion-item>
-                                            </div>
-                                            <ion-button [disabled]="!song_add_data.song_name || !song_add_data.song_author" shape="round" matTooltip="Send data" (click)="addSong()"
-                                                color="primary" class="btn-width-100">Add <mat-icon>library_music</mat-icon>
-                                            </ion-button>
-    
-                                        </div>
+                                       
                                         
                                     </ion-card-content>
                                     

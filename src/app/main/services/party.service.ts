@@ -1,3 +1,4 @@
+import { FireFunctionsService } from './../../shared/fire-functions.service';
 import { Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { collection } from '@angular/fire/firestore';
@@ -25,8 +26,9 @@ export class PartyService {
     public afs: Firestore,
     private aauth: Auth,
     private router: Router,
-    private notif: NotificationsService
-  ) { }
+    private notif: NotificationsService,
+    private fnsS: FireFunctionsService
+  ) {}
 
   async makeJoinParty(join_code: string) {
     const q_data: any = await this.getDocumentByPartyJoinCode(join_code);
@@ -116,37 +118,12 @@ export class PartyService {
     return retVal;
   }
 
-  async addSong(partyID: string, song_name: string, song_author: string) {
-    let q_doc = doc(this.afs, `partys/${partyID}`);
-    let ret_data: any = (await getDoc(q_doc)).data();
-
-    const song_info: any = {
-      added_by_displayName: this.aauth.currentUser?.displayName ?? '',
-      added_on: this.getCurrentDateTime(),
-      played: false,
-      song_author: song_author,
-      song_name: song_name,
-    };
-    if (ret_data.songs == undefined) ret_data.songs = [];
-
-    ret_data.songs.push(song_info);
-
-    await setDoc(q_doc, ret_data)
-      .then(() => {
-        this.notif.sendSuccess(
-          `Song ${song_name},by ${song_author}, was added with success!`
-        );
-        song_info.is_ok = true;
+  async addSong(partyID: string, song_link: string) {
+    return this.fnsS
+      .call_https('addSpotifySongToParty', {
+        partyID: partyID,
+        songLink: song_link,
       })
-      .catch((error) => {
-        console.log(error);
-        song_info.is_ok = false;
-
-        this.notif.sendDanger(
-          `An unexpected error has occured while trying to add song ${song_name},by ${song_author}!`
-        );
-      });
-    return song_info;
   }
   async updatePartyInfo(
     partyID: string,
@@ -177,7 +154,6 @@ export class PartyService {
   }
 
   async updateSongs(partyID: string, songs: any[]) {
-    
     return await updateDoc(doc(this.afs, `partys/${partyID}`), { songs: songs })
       .then((response) => {
         console.log(response);
@@ -185,7 +161,7 @@ export class PartyService {
       })
       .catch((error) => {
         console.error(error);
-        return error
+        return error;
       });
   }
 

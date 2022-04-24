@@ -52,7 +52,7 @@ export class CallbackComponent implements OnInit {
       ...this.callback_params,
     };
 
-    this.fireFunctionsS.call_https('validateSpotifyToken', newParams).then(
+    this.fireFunctionsS.call_https('setupSpotifyToken', newParams).then(
       (data: any) => {
         console.log(data);
       

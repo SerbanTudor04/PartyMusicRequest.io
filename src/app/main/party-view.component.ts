@@ -8,17 +8,28 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SongsModel } from '../shared/party';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { doc, onSnapshot } from 'firebase/firestore';
+
+
 @Component({
   selector: 'app-party-view',
   templateUrl: './party-view.component.html',
   styleUrls: ['./party-view.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
   ],
 })
@@ -29,32 +40,27 @@ export class PartyViewComponent implements OnInit {
   };
   partyid_code: string;
 
-  expandedElement:SongsModel|null=null;
+  expandedElement: SongsModel | null = null;
 
-  songs_edited:any[]=[]
-  song_modifications:boolean=false;
+  songs_edited: any[] = [];
+  song_modifications: boolean = false;
 
-  last_search:string=""
+  last_search: string = '';
 
-  view_mode:string="a"
+  view_mode: string = 'a';
 
   add_song: boolean = false;
-  add_song_manual:boolean=false;  
-  
-  song_link:string=""
+  song_request_exists: boolean = false;
+
+
+  song_link: string = '';
 
   edit_poarty: boolean = false;
   is_owner: boolean = false;
 
   can_update_info: boolean = true;
 
-
-  is_allowed_refresh:boolean= true;
-
-  song_add_data = {
-    song_name: '',
-    song_author: '',
-  };
+  is_allowed_refresh: boolean = true;
 
   @ViewChild(MatPaginator, { static: false })
   set paginator(value: MatPaginator) {
@@ -83,42 +89,36 @@ export class PartyViewComponent implements OnInit {
     private route: ActivatedRoute,
     private loadingS: LoadingBarService,
     public notifS: NotificationsService,
-    private aauth: Auth,
+    private aauth: Auth
   ) {
     this.partyid_code = String(this.route.snapshot.paramMap.get('partyID'));
   }
 
   ngOnInit(): void {
-    this.initPage()
-    
+    this.initPage();
   }
 
-  doRefresh(event:any){
-  
-    
-    if(!this.is_allowed_refresh){
-      this.notifS.sendWarning("You need to wait, in order to refresh again!")
+  doRefresh(event: any) {
+    if (!this.is_allowed_refresh) {
+      this.notifS.sendWarning('You need to wait, in order to refresh again!');
       event.target.complete();
-      
-      return
+
+      return;
     }
-    this.is_allowed_refresh=false;
-    
-    this.initPage().then(
-      ()=>{
-        this.notifS.sendSuccess("Refresh has been made with success!")
-       
-     
-        event.target.complete();
-        setTimeout(()=>{
-          this.is_allowed_refresh=true;
-        },6000)
-      }
-    )
+    this.is_allowed_refresh = false;
+
+    this.initPage().then(() => {
+      this.notifS.sendSuccess('Refresh has been made with success!');
+
+      event.target.complete();
+      setTimeout(() => {
+        this.is_allowed_refresh = true;
+      }, 6000);
+    });
   }
 
   async initPage() {
-    this.loadingS.turnOn()
+    this.loadingS.turnOn();
     this.party_data = await this.partyS.getPartyData(this.partyid_code);
 
     this.dataSource = new MatTableDataSource(this.party_data.data.songs);
@@ -126,119 +126,117 @@ export class PartyViewComponent implements OnInit {
     this.hasAccess = this.party_data.hasAccess;
     if (this.party_data.data.created_by == this.aauth.currentUser?.uid)
       this.is_owner = true;
-    if(this.hasAccess){
-      onSnapshot(doc(this.partyS.afs,`partys/${this.partyid_code}`),(
-        (doc)=>{
-          const new_data:any=doc.data();
-          // console.log(new_data);
-          this.dataSource = new MatTableDataSource(new_data.songs);
-          
-  
-        }
-      ))
+    if (this.hasAccess) {
+      onSnapshot(doc(this.partyS.afs, `partys/${this.partyid_code}`), (doc) => {
+        const new_data: any = doc.data();
+        // console.log(new_data);
+        this.dataSource = new MatTableDataSource(new_data.songs);
+      });
     }
-    await this.getLastSearch()
-    this.loadingS.turnOff()
-
+    await this.getLastSearch();
+    this.loadingS.turnOff();
   }
 
   addSong() {
-    if (!this.song_add_data.song_author || !this.song_add_data.song_name)
+    if (this.song_request_exists){
+      this.notifS.sendWarning('You are already adding a song! Wait 10 seconds in order to add another one.');
       return;
+    };
 
-    this.loadingS.turnOn();
+    this.song_request_exists = true;
+    setTimeout(() => {
+      this.song_request_exists = false;
+    }, 10000);
+    if (!this.song_link) {
+      this.notifS.sendWarning('You need to enter a link!');
+      return;
+    }
+    
     this.partyS
-      .addSong(
-        this.partyid_code,
-        this.song_add_data.song_name,
-        this.song_add_data.song_author
-      )
-      .then((song: any) => {
-        // console.log(song);
-
-        // this.dataSource.data.push(song)
-
-        this.song_add_data.song_name=""
-        this.song_add_data.song_author=""
-
-        this.add_song=false
-
-
-        this.loadingS.turnOff();
+      .addSong(this.partyid_code, this.song_link)
+      .then(() => {
+        this.notifS.sendSuccess('Song has been added!');
+        this.song_link = '';
       })
-      .catch((error) => {
-        console.log(error);
-        this.loadingS.turnOff();
+      .catch((err) => {
+        this.notifS.sendDanger('Error while adding the song!');
       });
   }
 
   updatePartyInfo() {
-    if (!this.party_data.data.name || !this.party_data.data.description || !this.can_update_info)
+    if (
+      !this.party_data.data.name ||
+      !this.party_data.data.description ||
+      !this.can_update_info
+    )
       return;
     this.can_update_info = false;
 
-    this.partyS.updatePartyInfo(
-      this.partyid_code,
-      this.party_data.data.name,
-      this.party_data.data.description,
-      this.party_data.data.open
-    ).then(
-      () => {
+    this.partyS
+      .updatePartyInfo(
+        this.partyid_code,
+        this.party_data.data.name,
+        this.party_data.data.description,
+        this.party_data.data.open
+      )
+      .then(() => {
         setTimeout(() => {
           this.can_update_info = true;
-        }, 10000)
-      }
-    ).catch(
-      (error) => {
+        }, 10000);
+      })
+      .catch((error) => {
         console.log(error);
         setTimeout(() => {
           this.can_update_info = true;
-        }, 10000)
-      }
-    )
+        }, 10000);
+      });
   }
 
-  markASongAsPlayed(element:any){  
-    if(this.songs_edited.indexOf(element)==-1)
-      this.songs_edited.push(element)
-
+  markASongAsPlayed(element: any) {
+    if (this.songs_edited.indexOf(element) == -1)
+      this.songs_edited.push(element);
   }
 
-  saveSongsPlayed(){
-    if(this.songs_edited.length<=0)
-      return;
+  saveSongsPlayed() {
+    if (this.songs_edited.length <= 0) return;
 
-    for(let i in this.songs_edited){      
-      let el=this.songs_edited[i]
+    for (let i in this.songs_edited) {
+      let el = this.songs_edited[i];
 
-      let index_of=this.party_data.data.songs.findIndex((x:any)=>x.song_name === el.song_name && x.song_author === el.song_author)
+      let index_of = this.party_data.data.songs.findIndex(
+        (x: any) =>
+          x.song_name === el.song_name && x.song_author === el.song_author
+      );
 
-      if(index_of!=-1){
-        this.party_data.data.songs[index_of].played=true;
-      }else{
-        this.notifS.sendWarning("Something went wrong, please refresh the page!")
+      if (index_of != -1) {
+        this.party_data.data.songs[index_of].played = true;
+      } else {
+        this.notifS.sendWarning(
+          'Something went wrong, please refresh the page!'
+        );
       }
-      
     }
     // reset list of selected songs
-    this.songs_edited=[]
-  
+    this.songs_edited = [];
+
     // update the party
-    this.loadingS.turnOn()
-    this.partyS.updateSongs(this.partyid_code,this.party_data.data.songs).finally(()=>{
-      this.loadingS.turnOff()
-    });
+    this.loadingS.turnOn();
+    this.partyS
+      .updateSongs(this.partyid_code, this.party_data.data.songs)
+      .finally(() => {
+        this.loadingS.turnOff();
+      });
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
 
-    localStorage.setItem(`pmr_pv_search__${this.partyid_code}`,filterValue)
+    localStorage.setItem(`pmr_pv_search__${this.partyid_code}`, filterValue);
 
-    this.applyFilterOnTable(filterValue)
+    this.applyFilterOnTable(filterValue);
   }
 
-  applyFilterOnTable(filterValue:string){
+  applyFilterOnTable(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
@@ -246,36 +244,35 @@ export class PartyViewComponent implements OnInit {
     }
   }
 
-  selectVIewMode(){
-    if(this.view_mode=="a"){
-      this.applyFilterOnTable('')
-      return
+  selectVIewMode() {
+    if (this.view_mode == 'a') {
+      this.applyFilterOnTable('');
+      return;
     }
 
-    let mode=false  
-    if(this.view_mode=="y")
-      mode=true
-    this.applyFilterOnTable(String(mode))
+    let mode = false;
+    if (this.view_mode == 'y') mode = true;
+    this.applyFilterOnTable(String(mode));
   }
 
-
-  get_share_link(join_code:string){
-    return `${window.location.protocol}//${window.location.hostname}/join/${join_code}`
+  get_share_link(join_code: string) {
+    return `${window.location.protocol}//${window.location.hostname}/join/${join_code}`;
   }
 
-  copy2Clipboard(data:string){
+  copy2Clipboard(data: string) {
     const listener = (e: ClipboardEvent) => {
       e.clipboardData!.setData('text/plain', data);
       e.preventDefault();
       document.removeEventListener('copy', listener);
-      };
-      document.addEventListener('copy', listener);
-      document.execCommand('copy');
-      }
+    };
+    document.addEventListener('copy', listener);
+    document.execCommand('copy');
+  }
 
-
-    async getLastSearch(){
-      this.last_search=localStorage.getItem(`pmr_pv_search__${this.partyid_code}`)??""
-    }
-
+  async getLastSearch() {
+    this.last_search =
+      localStorage.getItem(`pmr_pv_search__${this.partyid_code}`) ?? '';
+  }
 }
+
+
