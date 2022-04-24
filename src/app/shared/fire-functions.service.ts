@@ -18,7 +18,7 @@ export class FireFunctionsService {
    }
    call_https(fnc_url:string,data?:any){
 
-    const fnc=functions.httpsCallable(this.fns,fnc_url)
+    const fnc=functions.httpsCallable(this.fns,fnc_url,{timeout:10000});
     
     return fnc(data).then(
       (result:any)=>{
@@ -27,20 +27,6 @@ export class FireFunctionsService {
 
       }
     );
-   }
-   open_popup(fnc_url:string){
-     console.log(this.api_url+fnc_url);
-     
-     window.open(this.api_url+fnc_url, '_blank');
-   }
-   callGET(fnc_url:string,params:any={}){
-      let  params_str='?';
-      for (const key in params) {
-        if (params.hasOwnProperty(key)) {
-          params_str+='&'+key+'='+params[key]
-        }
-      }
-      return this.httpS.get(this.api_url+fnc_url+params_str,{withCredentials:true});
    }
 
    private handleApiUrl(){

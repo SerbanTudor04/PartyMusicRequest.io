@@ -65,8 +65,10 @@ exports.validateSpotifyToken = functions.https.onRequest(middlewares.applyMiddle
 
           Spotify.getMe(async (error, userResults) => {
             if (error) {
+              functions.logger.error("Error retrieving user profile at user"+userUID, error);
               throw error;
             }
+
             functions.logger.log(
                 "User: "+userUID+" Auth code exchange result received:",
                 userResults,
@@ -75,6 +77,7 @@ exports.validateSpotifyToken = functions.https.onRequest(middlewares.applyMiddle
             const accessToken = data.body["access_token"];
             const spotifyUserID = userResults.body["id"];
             // Save the access token to the Firebase Realtime Database
+
             const firebaseToken = await updateFireAccountData(
                 userUID,
                 spotifyUserID,

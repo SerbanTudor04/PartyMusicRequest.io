@@ -13,7 +13,8 @@ import {MatIconModule} from '@angular/material/icon';
 import { IonicModule } from '@ionic/angular';
 import { getFunctions, provideFunctions } from "@angular/fire/functions";
 import { getPerformance , providePerformance } from "@angular/fire/performance";
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -31,10 +32,16 @@ import { HttpClientModule } from '@angular/common/http';
     providePerformance(() => getPerformance()),
     IonicModule.forRoot(),
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'X-XSRF-TOKEN'
+    })
     
   ],
-  providers: [],
+  providers: [
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
