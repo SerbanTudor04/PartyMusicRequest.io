@@ -27,7 +27,8 @@ export class PartyService {
     private aauth: Auth,
     private router: Router,
     private notif: NotificationsService,
-    private fnsS: FireFunctionsService
+    private fnsS: FireFunctionsService,
+    private notifS: NotificationsService
   ) {}
 
   async makeJoinParty(join_code: string) {
@@ -124,6 +125,27 @@ export class PartyService {
         partyID: partyID,
         songLink: song_link,
       })
+      .then(async (data:any) => {
+        console.log(data.data);
+        
+        var obtained_data = await getDoc(doc(this.afs, `partys/${partyID}`));
+        var party_data:any = obtained_data.data();
+        var push_songs={
+          addedBy: this.aauth.currentUser?.uid,
+          addedByDisplayName: this.aauth.currentUser?.displayName,
+          addedOn: this.getCurrentDateTime(),
+          addedByAvatar: this.aauth.currentUser?.photoURL,
+          played: false,
+          ...data.data
+        }
+        party_data.songs.push(push_songs);
+        await updateDoc(doc(this.afs, `partys/${partyID}`), party_data);
+
+        this.notifS.sendSuccess('Song has been added!');
+      })
+      .catch((err) => {
+        this.notifS.sendDanger('Error while adding the song!');
+      });
   }
   async updatePartyInfo(
     partyID: string,
@@ -222,5 +244,9 @@ export class PartyService {
 
   private makeRedirect2Party(created_by_uid: string, partyID: string) {
     this.router.navigate(['pv', partyID]);
+  }
+
+  validateSpotifyToken() {
+    return this.fnsS.call_https('validateSpotifyAccessToken');
   }
 }

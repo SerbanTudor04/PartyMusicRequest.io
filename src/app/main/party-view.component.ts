@@ -58,6 +58,8 @@ export class PartyViewComponent implements OnInit {
   edit_poarty: boolean = false;
   is_owner: boolean = false;
 
+  isSpotifyTokenValid:boolean = true;
+
   can_update_info: boolean = true;
 
   is_allowed_refresh: boolean = true;
@@ -77,11 +79,12 @@ export class PartyViewComponent implements OnInit {
   }
 
   displayedColumns = [
-    'song_name',
-    'song_author',
-    'added_by_displayName',
-    'added_on',
+    'songName',
+    'songArtist',
+    'addedByDisplayName',
+    'addedOn',
     'played',
+    
   ];
   dataSource = new MatTableDataSource();
   constructor(
@@ -134,6 +137,9 @@ export class PartyViewComponent implements OnInit {
       });
     }
     await this.getLastSearch();
+
+    await this.validateSpotifyAccessToken();
+
     this.loadingS.turnOff();
   }
 
@@ -151,16 +157,16 @@ export class PartyViewComponent implements OnInit {
       this.notifS.sendWarning('You need to enter a link!');
       return;
     }
+    this.loadingS.turnOn();
     
     this.partyS
       .addSong(this.partyid_code, this.song_link)
       .then(() => {
-        this.notifS.sendSuccess('Song has been added!');
+
         this.song_link = '';
+        this.loadingS.turnOff();
       })
-      .catch((err) => {
-        this.notifS.sendDanger('Error while adding the song!');
-      });
+
   }
 
   updatePartyInfo() {
@@ -272,6 +278,20 @@ export class PartyViewComponent implements OnInit {
   async getLastSearch() {
     this.last_search =
       localStorage.getItem(`pmr_pv_search__${this.partyid_code}`) ?? '';
+  }
+
+  async validateSpotifyAccessToken(){
+    await this.partyS.validateSpotifyToken().then(() => {
+      // this.notifS.sendSuccess('Spotify token has been validated!');
+    }).catch((err) => {
+      this.notifS.sendDanger('Error while validating the Spotify token!');
+      this.isSpotifyTokenValid=false
+
+    });
+  }
+  showUserProfile(userID: string){
+    this.notifS.sendWarning('This feature is not available yet!');
+    // this.router.navigate(['/user-profile', userID]);
   }
 }
 

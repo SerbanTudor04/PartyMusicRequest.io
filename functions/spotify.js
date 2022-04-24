@@ -74,6 +74,7 @@ exports.setupSpotifyToken = functions.https.onRequest(middlewares.applyMiddlewar
             );
             // We have a Spotify access token and the user identity now.
             const accessToken = data.body["access_token"];
+            const refreshToken=data.body["refresh_token"];
             const spotifyUserID = userResults.body["id"];
             // Save the access token to the Firebase Realtime Database
 
@@ -81,6 +82,7 @@ exports.setupSpotifyToken = functions.https.onRequest(middlewares.applyMiddlewar
                 userUID,
                 spotifyUserID,
                 accessToken,
+                refreshToken,
             );
 
             // Serve an HTML page that signs the user in and updates the user profile.
@@ -120,26 +122,28 @@ exports.addSpotifySongToParty = functions.https.onRequest(middlewares.applyMiddl
         functions.logger.info("User "+userUID+" added song "+songID+" to party "+partyID);
 
         Spotify.setAccessToken(spotifyAccessToken);
-        Spotify.getTrack(songID, async (error, data) => {
+        Spotify.getTrack(songID, {}, async (error, data) => {
           if (error) {
-            functions.logger.error("Error retrieving song info at user"+userUID, error);
+            functions.logger.error("Error retrieving song info at user" + userUID, error);
             throw error;
           }
-          functions.logger.info("User:"+userUID+" Song info received:", data);
-          const songData=data.body;
-          const songName=songData.name;
-          const songArtist=songData.artists[0].name;
-          const songAlbum=songData.album.name;
-          const songDuration=songData.duration_ms;
+          functions.logger.info("User:" + userUID + " Song info received:", data);
+          const songData = data.body;
+          const songName = songData.name;
+          const songArtist = songData.artists[0].name;
+          const songAlbum = songData.album.name;
+          const songDuration = songData.duration_ms;
 
-          await addSonginParty(partyID, songID, songName, songArtist, songAlbum, songDuration, songLink);
-          res.jsonp({data: {
-            songName: songName,
-            songArtist: songArtist,
-            songAlbum: songAlbum,
-            songDuration: songDuration,
-            songLink: songLink,
-          }, status: 200});
+          // await addSonginParty(partyID, songID, songName, songArtist, songAlbum, songDuration, songLink);
+          res.jsonp({
+            data: {
+              songName: songName,
+              songArtist: songArtist,
+              songAlbum: songAlbum,
+              songDuration: songDuration,
+              songLink: songLink,
+            }, status: 200,
+          });
         });
       } catch (error) {
         res.status(400);
@@ -150,25 +154,24 @@ exports.addSpotifySongToParty = functions.https.onRequest(middlewares.applyMiddl
 
 
 exports.refreshSpotifyToken = functions.https.onRequest(middlewares.applyMiddleware(
-
     async (req, res) => {
       try {
         const userUID = String(req.user.uid);
-        const spotifyAccessToken = await getUserSpotifyAccessToken(userUID);
-        if (!spotifyAccessToken) {
+        const spotifyRefreshToken = await getUserSpotifyRefreshToken(userUID);
+        if (!spotifyRefreshToken) {
           throw new Error("You need to associate a Spotify account to your PMR account first");
         }
-        Spotify.
-            Spotify.refreshAccessToken(spotifyAccessToken, async (error, data) => {
-              if (error) {
-                functions.logger.error("Error refreshing access token at user"+userUID, error);
-                throw error;
-              }
-              functions.logger.info("User:"+userUID+" Access token refreshed:", data);
-              const newAccessToken = data.body["access_token"];
-              await updateFireAccountData(userUID, null, newAccessToken);
-              res.jsonp({data: {token: newAccessToken}, status: 200});
-            });
+        Spotify.setRefreshToken(spotifyRefreshToken);
+        Spotify.refreshAccessToken(async (error, data) => {
+          if (error) {
+            functions.logger.error("Error refreshing access token at user"+userUID, error);
+            throw error;
+          }
+          functions.logger.info("User:"+userUID+" Access token refreshed:", data);
+          const newAccessToken = data.body["access_token"];
+          await updateFireAccountData(userUID, null, newAccessToken);
+          res.jsonp({data: {token: newAccessToken}, status: 200});
+        });
       } catch (error) {
         res.status(400);
         res.jsonp({data: {error: error.toString()}, status: 400});
@@ -211,9 +214,10 @@ exports.validateSpotifyAccessToken= functions.https.onRequest(middlewares.applyM
  * @param {user} uid User profile object returned by Firebase Auth
  * @param {spotifyID} spotifyID Spotify user ID
  * @param {accessToken} accessToken The access token to exchange for a Firebase custom auth token
+ * @param {refreshToken} refreshToken The refresh token to exchange for a Firebase custom auth token
  * @return {Promise<string>} The Firebase custom auth token in a promise.
  */
-async function updateFireAccountData(uid, spotifyID, accessToken) {
+async function updateFireAccountData(uid, spotifyID, accessToken, refreshToken) {
   const userData = await fireStore.collection("accounts").doc(uid).get();
 
   if (userData.exists) {
@@ -224,6 +228,9 @@ async function updateFireAccountData(uid, spotifyID, accessToken) {
     }
     if (accessToken) {
       data.spotify_access_token = accessToken;
+    }
+    if (refreshToken) {
+      data.spotify_refresh_token = refreshToken;
     }
     await fireStore.collection("accounts").doc(uid).update(data);
     const spotifyUid = `spotify:${spotifyID}`;
@@ -259,41 +266,6 @@ async function validateIfUserIsMemberOfParty(userUID, partyID) {
   return false;
 }
 
-/**
-  * Adds a song to the party
-  * @param {string} partyID The ID of the party
-  * @param {string} songID The ID of the song
-  * @param {string} songName The name of the song
-  * @param {string} songArtist The artist of the song
-  * @param {string} songAlbum The album of the song
-  * @param {number} songDuration The duration of the song
-  * @param {string} songLink The link to the song
-  * @return {Promise<boolean>} True if the song was added successfully
-  *
-  */
-async function addSonginParty(partyID, songID, songName, songArtist, songAlbum, songDuration, songLink) {
-  try {
-    const partyRef = fireStore.collection("partys").doc(partyID);
-    const partyData = await partyRef.get();
-    if (partyData.exists) {
-      const partyData = partyData.data();
-      const songList = partyData.songList;
-      songList.push({
-        songID: songID,
-        songName: songName,
-        songArtist: songArtist,
-        songAlbum: songAlbum,
-        songDuration: songDuration,
-        songLink: songLink,
-      });
-      await partyRef.update({songList: songList});
-    }
-    return true;
-  } catch (error) {
-    functions.logger.error("Error adding song to party", error);
-    return false;
-  }
-}
 
 /**
   * Gets the song ID from the song link
@@ -302,7 +274,7 @@ async function addSonginParty(partyID, songID, songName, songArtist, songAlbum, 
   */
 function getSongID(songLink) {
   try {
-    const songID=songLink.split("/")[4];
+    const songID=songLink.split("/")[4].split("?")[0];
     return songID;
   } catch (error) {
     return null;
@@ -319,6 +291,19 @@ async function getUserSpotifyAccessToken(userUID) {
   if (userData.exists) {
     const data = userData.data();
     return data.spotify_access_token;
+  }
+  return null;
+}
+/**
+ * Gets the user's Spotify access token from the datastore
+ * @param {string} userUID
+ * @return {Promise<string>}
+ */
+async function getUserSpotifyRefreshToken(userUID) {
+  const userData = await fireStore.collection("accounts").doc(userUID).get();
+  if (userData.exists) {
+    const data = userData.data();
+    return data.spotify_refresh_token;
   }
   return null;
 }

@@ -2,11 +2,21 @@
     <app-open-side-nav></app-open-side-nav>
     <app-loading-bar></app-loading-bar>
 
+
+
+
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-down-circle-sharp" pullingText="Pull to refresh"
             refreshingSpinner="circles" refreshingText="Refreshing...">
         </ion-refresher-content>
     </ion-refresher>
+
+
+    <ion-modal [isOpen]="!isSpotifyTokenValid">
+        <ng-template>
+          <app-refresh-spotify-token></app-refresh-spotify-token>
+        </ng-template>
+    </ion-modal>
 
     <div class="pv__container">
         <div *ngIf="hasAccess" class="pv__hasAccess">
@@ -178,23 +188,29 @@
                         <table matSort [bgColor]="'dark'" mat-table [dataSource]="dataSource" class="mat-elevation-z0"
                             multiTemplateDataRows>
 
-                            <ng-container matColumnDef="song_name">
-                                <th mat-sort-header mat-header-cell *matHeaderCellDef> Name </th>
-                                <td mat-cell *matCellDef="let element"> {{element.song_name }} </td>
+                            <ng-container matColumnDef="songName">
+                                <th mat-sort-header mat-header-cell *matHeaderCellDef> Song </th>
+                                <td mat-cell *matCellDef="let element"> {{element.songName }} </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="song_author">
-                                <th mat-sort-header mat-header-cell *matHeaderCellDef> Author </th>
-                                <td mat-cell *matCellDef="let element"> {{element.song_author }} </td>
+                            <ng-container matColumnDef="songArtist">
+                                <th mat-sort-header mat-header-cell *matHeaderCellDef> Artist </th>
+                                <td mat-cell *matCellDef="let element"> {{element.songArtist }} </td>
                             </ng-container>
 
-                            <ng-container matColumnDef="added_by_displayName">
+                            <ng-container matColumnDef="addedByDisplayName">
                                 <th mat-sort-header mat-header-cell *matHeaderCellDef> Added by </th>
-                                <td mat-cell *matCellDef="let element"> {{element.added_by_displayName}} </td>
+                                <td mat-cell *matCellDef="let element"> 
+                                    <ion-chip color="primary" (click)="showUserProfile(element.addedByDisplayName)"
+                                        class="chip-user-profile">
+                                        <ion-label>{{element.addedByDisplayName}}</ion-label>
+                                    </ion-chip>                                    
+ 
+                                </td>
                             </ng-container>
-                            <ng-container matColumnDef="added_on">
+                            <ng-container matColumnDef="addedOn">
                                 <th mat-sort-header mat-header-cell *matHeaderCellDef> Added on </th>
-                                <td mat-cell *matCellDef="let element"> {{element.added_on | date}} </td>
+                                <td mat-cell *matCellDef="let element"> {{element.addedOn | date}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="played">
