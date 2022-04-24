@@ -26,6 +26,7 @@ import { ViewQRCodeComponent } from './view-qrcode/view-qrcode.component';
 import { ContactUsComponent } from './contact-us.component';
 import { SetttingsPageComponent } from './setttings-page.component';
 import { LoadingBarComponent } from './loading-bar/loading-bar.component';
+import { RefreshSpotifyTokenComponent } from './refresh-spotify-token/refresh-spotify-token.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { LoadingBarComponent } from './loading-bar/loading-bar.component';
     ContactUsComponent,
     SetttingsPageComponent,
     LoadingBarComponent,
+    RefreshSpotifyTokenComponent,
     
   ],
   imports: [
