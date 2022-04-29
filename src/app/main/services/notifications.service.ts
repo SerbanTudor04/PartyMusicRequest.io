@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 // import { MatSnackBar } from '@angular/material/snack-bar';
-import { ToastController } from '@ionic/angular';@Injectable({
+import { ToastController, ToastOptions } from '@ionic/angular';@Injectable({
   providedIn: 'root'
 })
 export class NotificationsService {
@@ -8,30 +8,30 @@ export class NotificationsService {
   notifDuration=5000;
   constructor(public toastController: ToastController) { }
 
-  async sendMessage(message:string){
+  async sendMessage(header:string,message:string,icon:string,duration:number=this.notifDuration,position:ToastOptions["position"]='bottom'){
     const toast = await this.toastController.create({
-      header: 'Success',
+      header: header,
       message: message,
-      duration: 5000,
-      icon: 'information-circle',
-      position: 'bottom',
+      duration: duration,
+      icon: "assets/icons/"+icon+".svg",
+      position: position,
     });
     toast.present();
   }
 
 
   async sendDanger(message:string){
-    this.sendMessage(message);
+    this.sendMessage("Error",message,"bug-outline");
 
   }
   async sendWarning(message:string){
-    this.sendMessage(message);
+    this.sendMessage("Warning",message,"alert-outline");
 
   }
   async sendSuccess(message:string){
 
 
-    this.sendMessage(message);
+    this.sendMessage("Success",message,"happy-outline");
   }
 
 }
