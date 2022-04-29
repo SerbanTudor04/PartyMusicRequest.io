@@ -58,7 +58,9 @@ export class PartyViewComponent implements OnInit {
   edit_poarty: boolean = false;
   is_owner: boolean = false;
 
+  has_spotify_account:boolean = true;
   isSpotifyTokenValid:boolean = true;
+
 
   can_update_info: boolean = true;
 
@@ -101,24 +103,6 @@ export class PartyViewComponent implements OnInit {
     this.initPage();
   }
 
-  doRefresh(event: any) {
-    if (!this.is_allowed_refresh) {
-      this.notifS.sendWarning('You need to wait, in order to refresh again!');
-      event.target.complete();
-
-      return;
-    }
-    this.is_allowed_refresh = false;
-
-    this.initPage().then(() => {
-      this.notifS.sendSuccess('Refresh has been made with success!');
-
-      event.target.complete();
-      setTimeout(() => {
-        this.is_allowed_refresh = true;
-      }, 6000);
-    });
-  }
 
   async initPage() {
     this.loadingS.turnOn();
@@ -138,7 +122,9 @@ export class PartyViewComponent implements OnInit {
     }
     await this.getLastSearch();
 
-    await this.validateSpotifyAccessToken();
+    await this.checkIfSpotifyIsConfigured()
+    if(this.has_spotify_account)
+      await this.validateSpotifyAccessToken();
 
     this.loadingS.turnOff();
   }
@@ -148,6 +134,11 @@ export class PartyViewComponent implements OnInit {
       this.notifS.sendWarning('You are already adding a song! Wait 10 seconds in order to add another one.');
       return;
     };
+
+    if(!this.has_spotify_account){
+      this.notifS.sendWarning("You need to have a spotify account associated with the PMR account in order to add a song.")
+      return;
+    }
 
     this.song_request_exists = true;
     setTimeout(() => {
@@ -209,11 +200,16 @@ export class PartyViewComponent implements OnInit {
     for (let i in this.songs_edited) {
       let el = this.songs_edited[i];
 
+      console.log(el);
+      
+
       let index_of = this.party_data.data.songs.findIndex(
         (x: any) =>
-          x.song_name === el.song_name && x.song_author === el.song_author
+          x.songName === el.songName && x.songArtist === el.songArtist && x.addedByDisplayName === el.addedByDisplayName
       );
 
+      console.log(index_of);
+      
       if (index_of != -1) {
         this.party_data.data.songs[index_of].played = true;
       } else {
@@ -280,11 +276,21 @@ export class PartyViewComponent implements OnInit {
       localStorage.getItem(`pmr_pv_search__${this.partyid_code}`) ?? '';
   }
 
+  async checkIfSpotifyIsConfigured(){
+    await this.partyS.getUserAccount().then(async (accounts) => {
+        const data:any=accounts.data()
+        if(!data.spotifyID){
+          this.has_spotify_account=false
+        }
+    }
+    );
+  }
+
   async validateSpotifyAccessToken(){
     await this.partyS.validateSpotifyToken().then(() => {
       // this.notifS.sendSuccess('Spotify token has been validated!');
     }).catch((err) => {
-      this.notifS.sendDanger('Error while validating the Spotify token!');
+      // this.notifS.sendDanger('Error while validating the Spotify token!');
       this.isSpotifyTokenValid=false
 
     });
@@ -292,6 +298,19 @@ export class PartyViewComponent implements OnInit {
   showUserProfile(userID: string){
     this.notifS.sendWarning('This feature is not available yet!');
     // this.router.navigate(['/user-profile', userID]);
+  }
+  async refreshToken() {
+    this.loadingS.turnOn();
+    await this.partyS.callRefreshToken().then(() => {
+      this.notifS.sendSuccess('Token refreshed!');
+    }).catch(() => {
+      this.notifS.sendDanger('Error refreshing token! Please consider contacting the support.');
+      this.has_spotify_account=false;
+    }).finally(() => {
+      this.isSpotifyTokenValid=true
+      this.loadingS.turnOff();
+    });
+    this.loadingS.turnOff();
   }
 }
 

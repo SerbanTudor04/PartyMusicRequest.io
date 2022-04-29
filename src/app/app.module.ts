@@ -13,7 +13,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { IonicModule } from '@ionic/angular';
 import { getFunctions, provideFunctions } from "@angular/fire/functions";
 import { getPerformance , providePerformance } from "@angular/fire/performance";
-import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 
 
 @NgModule({

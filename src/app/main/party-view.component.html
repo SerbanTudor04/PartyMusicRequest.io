@@ -1,20 +1,16 @@
 <ion-content>
     <app-open-side-nav></app-open-side-nav>
     <app-loading-bar></app-loading-bar>
-
-
-
-
-    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content pullingIcon="arrow-down-circle-sharp" pullingText="Pull to refresh"
-            refreshingSpinner="circles" refreshingText="Refreshing...">
-        </ion-refresher-content>
-    </ion-refresher>
-
-
-    <ion-modal [isOpen]="!isSpotifyTokenValid">
+    <ion-modal animated="true" [isOpen]="!isSpotifyTokenValid">
         <ng-template>
-          <app-refresh-spotify-token></app-refresh-spotify-token>
+            <div class="spotify__Refresh">
+                <ion-text class="spotify__Refresh_Title">
+                    Your Spotify Token is about to expire or has expired, click on button in order to refresh it.
+                </ion-text>
+                <ion-button mode="ios" class="button_refresh" expand="block" color="primary" fill="outline" shape="round" (click)="refreshToken()">
+                    Refresh
+                </ion-button>
+            </div>
         </ng-template>
     </ion-modal>
 
@@ -115,15 +111,9 @@
                                             </ion-item>
                                             <ion-button (click)="addSong()"  shape="round" expand="block" >Add</ion-button>
                                             
-                                        </div>
-
-                                       
-                                        
+                                        </div>  
                                     </ion-card-content>
-                                    
                                 </ion-card>
-                                
-
                             </div>
                             <div style="overflow: hidden;" *ngIf="edit_poarty && is_owner"
                                 class="pv__add_song pv__blocks">

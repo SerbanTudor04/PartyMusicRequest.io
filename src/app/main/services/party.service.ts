@@ -249,4 +249,10 @@ export class PartyService {
   validateSpotifyToken() {
     return this.fnsS.call_https('validateSpotifyAccessToken');
   }
+  getUserAccount() {
+    return getDoc(doc(this.afs, `accounts/${this.aauth.currentUser?.uid}`));
+  }
+  callRefreshToken(){
+    return this.fnsS.call_https('refreshSpotifyToken', {})
+  }
 }
