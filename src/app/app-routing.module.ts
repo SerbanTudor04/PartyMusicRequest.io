@@ -1,10 +1,14 @@
 import { AppComponent } from './app.component';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {  RouterModule, Routes } from '@angular/router';
 import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
-// const redirectAuthorizedToApp=()=> redirectLoggedInTo(['/'])
+const redirectUnauthorizedToLogin = () => {
+  const path = window.location.href   
+  sessionStorage.setItem('auth_redirect_url', path);
+  
+  return redirectUnauthorizedTo(['auth']);
+};
 const routes: Routes = [
   {path:"",component:AppComponent,children:[
     {

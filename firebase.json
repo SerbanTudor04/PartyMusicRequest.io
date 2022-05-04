@@ -2,9 +2,7 @@
   "hosting": {
     "target": "pmr",
     "public": "www",
-    "ignore": [
-      "**/.*"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "**/tests/**"],
     "headers": [
       {
         "source": "*.[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].+(css|js)",

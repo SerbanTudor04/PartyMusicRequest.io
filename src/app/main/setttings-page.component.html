@@ -47,7 +47,11 @@
                 <ion-img    src="../../assets/spotify-2.svg"></ion-img>
 
             </ion-avatar>
+
         </ion-button>
+        <small  *ngIf="!isSpotifyLoggedIn">
+            This application is in development, in order to use it you need to connect with Spotify, and in order to connect with Spotify you need to contact the administrator.
+        </small>
     </div>
 
 </ion-content>

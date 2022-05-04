@@ -14,8 +14,15 @@ export class AuthComponent implements OnInit {
     if(params['redirect_url']){
         this.auth.redirect_url.next(params['redirect_url'])
 
-    }      
+    }
+        
     })
+    if(sessionStorage.getItem('auth_redirect_url') && this.auth.redirect_url.value==null || this.auth.redirect_url.value==''){
+      this.auth.redirect_url.next(sessionStorage.getItem('auth_redirect_url')??"/")
+      sessionStorage.removeItem('auth_redirect_url')
+    }
+    console.log(this.auth.redirect_url.value);
+    
   }
 
   ngOnInit(): void {
