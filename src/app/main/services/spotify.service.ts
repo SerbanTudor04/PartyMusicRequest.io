@@ -17,7 +17,7 @@ export class SpotifyService {
 
     makeSpotifyLogin(){
       // this.notif.sendWarning("Spotify login is not implemented yet!")
-      this.fireFunctionsS.call_https('getRedirectAuthSpotify',{}).then(
+      return this.fireFunctionsS.call_https('getRedirectAuthSpotify',{}).then(
         (data:any) => {
           
           

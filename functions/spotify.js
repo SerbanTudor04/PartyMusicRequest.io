@@ -233,17 +233,7 @@ async function updateFireAccountData(uid, spotifyID, accessToken, refreshToken) 
       data.spotify_refresh_token = refreshToken;
     }
     await fireStore.collection("accounts").doc(uid).update(data);
-    const spotifyUid = `spotify:${spotifyID}`;
-    const customToken = await fireAdminJS.fireAuth.createCustomToken(
-        spotifyUid,
-    );
-    functions.logger.log(
-        "Created Custom token for UID \"",
-        uid,
-        "\" Token:",
-        customToken,
-    );
-    return customToken;
+    return data.spotify_access_token;
   }
   return null;
 }

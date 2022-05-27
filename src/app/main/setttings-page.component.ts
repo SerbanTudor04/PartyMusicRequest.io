@@ -75,6 +75,12 @@ export class SetttingsPageComponent implements OnInit {
   }
 
   makeSpotifyLogin() {
-    this.spotifS.makeSpotifyLogin();
+    this.loadingS.turnOn();
+    this.spotifS.makeSpotifyLogin().then(() => {
+      this.loadingS.turnOff();
+    }).catch(() => {
+      this.loadingS.turnOff();
+    });
+    
   }
 }

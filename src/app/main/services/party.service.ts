@@ -138,12 +138,18 @@ export class PartyService {
           played: false,
           ...data.data
         }
-        party_data.songs.push(push_songs);
+        if(party_data.songs){
+          party_data.songs.push(push_songs);
+        }else{
+          party_data.songs=[push_songs];
+        }
+        
         await updateDoc(doc(this.afs, `partys/${partyID}`), party_data);
 
         this.notifS.sendSuccess('Song has been added!');
       })
       .catch((err) => {
+        console.log(err);
         this.notifS.sendDanger('Error while adding the song!');
       });
   }

@@ -140,14 +140,15 @@ export class PartyViewComponent implements OnInit {
       return;
     }
 
-    this.song_request_exists = true;
-    setTimeout(() => {
-      this.song_request_exists = false;
-    }, 10000);
+
     if (!this.song_link) {
       this.notifS.sendWarning('You need to enter a link!');
       return;
     }
+    this.song_request_exists = true;
+    setTimeout(() => {
+      this.song_request_exists = false;
+    }, 10000);
     this.loadingS.turnOn();
     
     this.partyS
