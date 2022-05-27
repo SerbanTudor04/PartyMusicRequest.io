@@ -201,15 +201,16 @@ export class PartyViewComponent implements OnInit {
     for (let i in this.songs_edited) {
       let el = this.songs_edited[i];
 
-      console.log(el);
+      // console.log(el);
       
 
       let index_of = this.party_data.data.songs.findIndex(
         (x: any) =>
-          x.songName === el.songName && x.songArtist === el.songArtist && x.addedByDisplayName === el.addedByDisplayName
+          x.songName === el.songName  && x.addedBy === el.addedBy
       );
 
-      console.log(index_of);
+      // console.log(this.party_data.data.songs)
+      // console.log(index_of);
       
       if (index_of != -1) {
         this.party_data.data.songs[index_of].played = true;
@@ -217,6 +218,7 @@ export class PartyViewComponent implements OnInit {
         this.notifS.sendWarning(
           'Something went wrong, please refresh the page!'
         );
+        return;
       }
     }
     // reset list of selected songs
