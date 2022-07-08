@@ -10,6 +10,7 @@ resources
 # firebase_config.ts
 # Node
 /node_modules
+/node_modules/.bin
 npm-debug.log
 yarn-error.log
 
